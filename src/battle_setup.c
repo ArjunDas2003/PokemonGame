@@ -97,6 +97,9 @@ static const u8 *GetIntroSpeechOfApproachingTrainer(void);
 static const u8 *GetTrainerCantBattleSpeech(void);
 static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum);
 static void DoTrainerBattle(void);
+static u8 GetPlayerBadgeCount(void);
+static bool32 IsGymLeaderTrainer(u16 trainerNum, u8 *gymIndexOut);
+static void SetupGymLeaderBattleParty(struct Pokemon *party, u16 trainerNum);
 
 EWRAM_DATA TrainerBattleParameter gTrainerBattleParameter = {0};
 EWRAM_DATA u16 gPartnerTrainerId = 0;
@@ -1517,6 +1520,14 @@ void BattleSetup_StartTrainerBattle(void)
         gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
     }
 
+    if (IsGymLeaderTrainer(TRAINER_BATTLE_PARAM.opponentA, NULL))
+    {
+        u8 badgeCount = GetPlayerBadgeCount();
+        u8 gymStage = badgeCount + 1;
+        if (gymStage >= 6 && HasEnoughMonsForDoubleBattle2())
+            gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+    }
+
     sNoOfPossibleTrainerRetScripts = gNoOfApproachingTrainers;
     gNoOfApproachingTrainers = 0;
     sShouldCheckTrainerBScript = FALSE;
@@ -1669,6 +1680,14 @@ void BattleSetup_StartRematchBattle(void)
     gBattleTypeFlags = BATTLE_TYPE_TRAINER;
     if (GetTrainerBattleType(TRAINER_BATTLE_PARAM.opponentA) == TRAINER_BATTLE_TYPE_DOUBLES)
         gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+
+    if (IsGymLeaderTrainer(TRAINER_BATTLE_PARAM.opponentA, NULL))
+    {
+        u8 badgeCount = GetPlayerBadgeCount();
+        u8 gymStage = badgeCount + 1;
+        if (gymStage >= 6 && HasEnoughMonsForDoubleBattle2())
+            gBattleTypeFlags |= BATTLE_TYPE_DOUBLE;
+    }
     
     gMain.savedCallback = CB2_EndRematchBattle;
     DoTrainerBattle();
@@ -2441,6 +2460,549 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
     return SPECIES_DRAGONITE;
 }
 
+// Gym Dynamic Scaling Pools
+static const u16 sGymRockPool[] =
+{
+    SPECIES_GEODUDE,
+    SPECIES_GRAVELER,
+    SPECIES_GOLEM,
+    SPECIES_ONIX,
+    SPECIES_SUDOWOODO,
+    SPECIES_KABUTO,
+    SPECIES_OMANYTE,
+    SPECIES_AERODACTYL,
+    SPECIES_LARVITAR,
+    SPECIES_PUPITAR,
+    SPECIES_MAGCARGO,
+    SPECIES_CORSOLA,
+    SPECIES_ANORITH,
+    SPECIES_LILEEP,
+    SPECIES_ROGGENROLA,
+    SPECIES_BOLDORE,
+    SPECIES_GIGALITH,
+    SPECIES_ROCKRUFF,
+    SPECIES_LYCANROC,
+    SPECIES_NACLI,
+    SPECIES_NACLSTACK,
+    SPECIES_GARGANACL,
+};
+static const u16 sGymRockGen3Aces[] =
+{
+    SPECIES_NOSEPASS,
+    SPECIES_AGGRON,
+    SPECIES_CRADILY,
+    SPECIES_ARMALDO,
+    SPECIES_SOLROCK,
+    SPECIES_LUNATONE,
+    SPECIES_RELICANTH,
+};
+
+static const u16 sGymFightingPool[] =
+{
+    SPECIES_MACHOP,
+    SPECIES_MACHOKE,
+    SPECIES_MACHAMP,
+    SPECIES_MANKEY,
+    SPECIES_PRIMEAPE,
+    SPECIES_POLIWRATH,
+    SPECIES_HITMONLEE,
+    SPECIES_HITMONCHAN,
+    SPECIES_HITMONTOP,
+    SPECIES_HERACROSS,
+    SPECIES_MAKUHITA,
+    SPECIES_MEDITITE,
+    SPECIES_LUCARIO,
+    SPECIES_CONKELDURR,
+    SPECIES_PANGORO,
+    SPECIES_SIRFETCHD,
+    SPECIES_ANNIHILAPE,
+};
+static const u16 sGymFightingGen3Aces[] =
+{
+    SPECIES_HARIYAMA,
+    SPECIES_MEDICHAM,
+    SPECIES_BRELOOM,
+    SPECIES_BLAZIKEN,
+};
+
+static const u16 sGymElectricPool[] =
+{
+    SPECIES_PIKACHU,
+    SPECIES_RAICHU,
+    SPECIES_MAGNEMITE,
+    SPECIES_MAGNETON,
+    SPECIES_VOLTORB,
+    SPECIES_ELECTRODE,
+    SPECIES_ELECTABUZZ,
+    SPECIES_JOLTEON,
+    SPECIES_MAREEP,
+    SPECIES_FLAAFFY,
+    SPECIES_AMPHAROS,
+    SPECIES_ELECTRIKE,
+    SPECIES_LUXRAY,
+    SPECIES_ZEBSTRIKA,
+    SPECIES_HELIOLISK,
+    SPECIES_VIKAVOLT,
+    SPECIES_PAWMOT,
+    SPECIES_BELLIBOLT,
+};
+static const u16 sGymElectricGen3Aces[] =
+{
+    SPECIES_MANECTRIC,
+    SPECIES_PLUSLE,
+    SPECIES_MINUN,
+};
+
+static const u16 sGymFirePool[] =
+{
+    SPECIES_GROWLITHE,
+    SPECIES_ARCANINE,
+    SPECIES_PONYTA,
+    SPECIES_RAPIDASH,
+    SPECIES_VULPIX,
+    SPECIES_NINETALES,
+    SPECIES_MAGMAR,
+    SPECIES_FLAREON,
+    SPECIES_CYNDAQUIL,
+    SPECIES_QUILAVA,
+    SPECIES_TYPHLOSION,
+    SPECIES_SLUGMA,
+    SPECIES_MAGCARGO,
+    SPECIES_HOUNDOUR,
+    SPECIES_HOUNDOOM,
+    SPECIES_NUMEL,
+    SPECIES_TALONFLAME,
+    SPECIES_SALAZZLE,
+    SPECIES_CENTISKORCH,
+    SPECIES_CERULEDGE,
+    SPECIES_ARMAROUGE,
+    SPECIES_SKELEDIRGE,
+};
+static const u16 sGymFireGen3Aces[] =
+{
+    SPECIES_TORKOAL,
+    SPECIES_CAMERUPT,
+    SPECIES_BLAZIKEN,
+};
+
+static const u16 sGymNormalPool[] =
+{
+    SPECIES_RATTATA,
+    SPECIES_RATICATE,
+    SPECIES_PIDGEOT,
+    SPECIES_MEOWTH,
+    SPECIES_PERSIAN,
+    SPECIES_DODRIO,
+    SPECIES_KANGASKHAN,
+    SPECIES_TAUROS,
+    SPECIES_SNORLAX,
+    SPECIES_AIPOM,
+    SPECIES_GIRAFARIG,
+    SPECIES_DUNSPARCE,
+    SPECIES_URSARING,
+    SPECIES_MILTANK,
+    SPECIES_BLISSEY,
+    SPECIES_ZIGZAGOON,
+    SPECIES_LINOONE,
+    SPECIES_TAILLOW,
+    SPECIES_SWELLOW,
+    SPECIES_VIGOROTH,
+    SPECIES_LOUDRED,
+    SPECIES_SPINDA,
+    SPECIES_ZANGOOSE,
+    SPECIES_CASTFORM,
+    SPECIES_KECLEON,
+    SPECIES_STARAPTOR,
+    SPECIES_BEWEAR,
+    SPECIES_DUDUNSPARCE,
+};
+static const u16 sGymNormalGen3Aces[] =
+{
+    SPECIES_SLAKING,
+    SPECIES_EXPLOUD,
+    SPECIES_ZANGOOSE,
+    SPECIES_SWELLOW,
+    SPECIES_LINOONE,
+};
+
+static const u16 sGymFlyingPool[] =
+{
+    SPECIES_PIDGEOT,
+    SPECIES_FEAROW,
+    SPECIES_GOLBAT,
+    SPECIES_CROBAT,
+    SPECIES_FARFETCHD,
+    SPECIES_DODRIO,
+    SPECIES_AERODACTYL,
+    SPECIES_NOCTOWL,
+    SPECIES_XATU,
+    SPECIES_SKARMORY,
+    SPECIES_TAILLOW,
+    SPECIES_SWELLOW,
+    SPECIES_WINGULL,
+    SPECIES_PELIPPER,
+    SPECIES_TROPIUS,
+    SPECIES_STARAPTOR,
+    SPECIES_HONCHKROW,
+    SPECIES_CORVIKNIGHT,
+    SPECIES_KILOWATTREL,
+};
+static const u16 sGymFlyingGen3Aces[] =
+{
+    SPECIES_ALTARIA,
+    SPECIES_SWELLOW,
+    SPECIES_TROPIUS,
+    SPECIES_PELIPPER,
+    SPECIES_SALAMENCE,
+    SPECIES_NINJASK,
+};
+
+static const u16 sGymPsychicPool[] =
+{
+    SPECIES_ABRA,
+    SPECIES_KADABRA,
+    SPECIES_ALAKAZAM,
+    SPECIES_SLOWPOKE,
+    SPECIES_SLOWBRO,
+    SPECIES_DROWZEE,
+    SPECIES_HYPNO,
+    SPECIES_EXEGGCUTE,
+    SPECIES_EXEGGUTOR,
+    SPECIES_STARMIE,
+    SPECIES_MR_MIME,
+    SPECIES_JYNX,
+    SPECIES_ESPEON,
+    SPECIES_NATU,
+    SPECIES_XATU,
+    SPECIES_GIRAFARIG,
+    SPECIES_RALTS,
+    SPECIES_KIRLIA,
+    SPECIES_MEDITITE,
+    SPECIES_SPOINK,
+    SPECIES_BALTOY,
+    SPECIES_BRONZONG,
+    SPECIES_GOTHITELLE,
+    SPECIES_REUNICLUS,
+    SPECIES_HATTERENE,
+    SPECIES_ESPATHRA,
+};
+static const u16 sGymPsychicGen3Aces[] =
+{
+    SPECIES_SOLROCK,
+    SPECIES_LUNATONE,
+    SPECIES_CLAYDOL,
+    SPECIES_GARDEVOIR,
+    SPECIES_GRUMPIG,
+    SPECIES_CHIMECHO,
+    SPECIES_MEDICHAM,
+    SPECIES_METAGROSS,
+};
+
+static const u16 sGymWaterPool[] =
+{
+    SPECIES_BLASTOISE,
+    SPECIES_GOLDUCK,
+    SPECIES_POLIWRATH,
+    SPECIES_TENTACRUEL,
+    SPECIES_SLOWBRO,
+    SPECIES_CLOYSTER,
+    SPECIES_KINGLER,
+    SPECIES_SEADRA,
+    SPECIES_SEAKING,
+    SPECIES_GYARADOS,
+    SPECIES_LAPRAS,
+    SPECIES_VAPOREON,
+    SPECIES_FERALIGATR,
+    SPECIES_LANTURN,
+    SPECIES_AZUMARILL,
+    SPECIES_POLITOED,
+    SPECIES_QUAGSIRE,
+    SPECIES_OCTILLERY,
+    SPECIES_MANTINE,
+    SPECIES_SWAMPERT,
+    SPECIES_LOMBRE,
+    SPECIES_PELIPPER,
+    SPECIES_SHARPEDO,
+    SPECIES_WAILORD,
+    SPECIES_WHISCASH,
+    SPECIES_CRAWDAUNT,
+    SPECIES_MILOTIC,
+    SPECIES_WALREIN,
+    SPECIES_RELICANTH,
+    SPECIES_GASTRODON,
+    SPECIES_FLOATZEL,
+    SPECIES_TOXAPEX,
+    SPECIES_BARRASKEWDA,
+    SPECIES_PALAFIN,
+    SPECIES_DONDOZO,
+};
+static const u16 sGymWaterGen3Aces[] =
+{
+    SPECIES_MILOTIC,
+    SPECIES_WALREIN,
+    SPECIES_LUDICOLO,
+    SPECIES_WHISCASH,
+    SPECIES_CRAWDAUNT,
+    SPECIES_SWAMPERT,
+    SPECIES_SHARPEDO,
+    SPECIES_RELICANTH,
+};
+
+struct GymPoolInfo
+{
+    const u16 *pool;
+    u32 poolCount;
+    const u16 *aces;
+    u32 acesCount;
+};
+
+static const struct GymPoolInfo sGymPools[8] =
+{
+    [0] = { sGymRockPool,     ARRAY_COUNT(sGymRockPool),     sGymRockGen3Aces,     ARRAY_COUNT(sGymRockGen3Aces) },
+    [1] = { sGymFightingPool, ARRAY_COUNT(sGymFightingPool), sGymFightingGen3Aces, ARRAY_COUNT(sGymFightingGen3Aces) },
+    [2] = { sGymElectricPool, ARRAY_COUNT(sGymElectricPool), sGymElectricGen3Aces, ARRAY_COUNT(sGymElectricGen3Aces) },
+    [3] = { sGymFirePool,     ARRAY_COUNT(sGymFirePool),     sGymFireGen3Aces,     ARRAY_COUNT(sGymFireGen3Aces) },
+    [4] = { sGymNormalPool,   ARRAY_COUNT(sGymNormalPool),   sGymNormalGen3Aces,   ARRAY_COUNT(sGymNormalGen3Aces) },
+    [5] = { sGymFlyingPool,   ARRAY_COUNT(sGymFlyingPool),   sGymFlyingGen3Aces,   ARRAY_COUNT(sGymFlyingGen3Aces) },
+    [6] = { sGymPsychicPool,  ARRAY_COUNT(sGymPsychicPool),  sGymPsychicGen3Aces,  ARRAY_COUNT(sGymPsychicGen3Aces) },
+    [7] = { sGymWaterPool,    ARRAY_COUNT(sGymWaterPool),    sGymWaterGen3Aces,    ARRAY_COUNT(sGymWaterGen3Aces) },
+};
+
+static u8 GetPlayerBadgeCount(void)
+{
+    u8 count = 0;
+    u32 i;
+    for (i = FLAG_BADGE01_GET; i < FLAG_BADGE01_GET + NUM_BADGES; i++)
+    {
+        if (FlagGet(i))
+            count++;
+    }
+    return count;
+}
+
+static bool32 IsGymLeaderTrainer(u16 trainerNum, u8 *gymIndexOut)
+{
+    switch (trainerNum)
+    {
+    case TRAINER_ROXANNE_1:
+    case TRAINER_ROXANNE_2:
+    case TRAINER_ROXANNE_3:
+    case TRAINER_ROXANNE_4:
+    case TRAINER_ROXANNE_5:
+        if (gymIndexOut) *gymIndexOut = 0;
+        return TRUE;
+
+    case TRAINER_BRAWLY_1:
+    case TRAINER_BRAWLY_2:
+    case TRAINER_BRAWLY_3:
+    case TRAINER_BRAWLY_4:
+    case TRAINER_BRAWLY_5:
+        if (gymIndexOut) *gymIndexOut = 1;
+        return TRUE;
+
+    case TRAINER_WATTSON_1:
+    case TRAINER_WATTSON_2:
+    case TRAINER_WATTSON_3:
+    case TRAINER_WATTSON_4:
+    case TRAINER_WATTSON_5:
+        if (gymIndexOut) *gymIndexOut = 2;
+        return TRUE;
+
+    case TRAINER_FLANNERY_1:
+    case TRAINER_FLANNERY_2:
+    case TRAINER_FLANNERY_3:
+    case TRAINER_FLANNERY_4:
+    case TRAINER_FLANNERY_5:
+        if (gymIndexOut) *gymIndexOut = 3;
+        return TRUE;
+
+    case TRAINER_NORMAN_1:
+    case TRAINER_NORMAN_2:
+    case TRAINER_NORMAN_3:
+    case TRAINER_NORMAN_4:
+    case TRAINER_NORMAN_5:
+        if (gymIndexOut) *gymIndexOut = 4;
+        return TRUE;
+
+    case TRAINER_WINONA_1:
+    case TRAINER_WINONA_2:
+    case TRAINER_WINONA_3:
+    case TRAINER_WINONA_4:
+    case TRAINER_WINONA_5:
+        if (gymIndexOut) *gymIndexOut = 5;
+        return TRUE;
+
+    case TRAINER_TATE_AND_LIZA_1:
+    case TRAINER_TATE_AND_LIZA_2:
+    case TRAINER_TATE_AND_LIZA_3:
+    case TRAINER_TATE_AND_LIZA_4:
+    case TRAINER_TATE_AND_LIZA_5:
+        if (gymIndexOut) *gymIndexOut = 6;
+        return TRUE;
+
+    case TRAINER_JUAN_1:
+    case TRAINER_JUAN_2:
+    case TRAINER_JUAN_3:
+    case TRAINER_JUAN_4:
+    case TRAINER_JUAN_5:
+        if (gymIndexOut) *gymIndexOut = 7;
+        return TRUE;
+
+    default:
+        return FALSE;
+    }
+}
+
+static u8 CalculatePlayerTopNAverageLevel(u8 n)
+{
+    u8 playerLevels[PARTY_SIZE];
+    u8 count = 0;
+    u32 i, j;
+    u32 sum = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        struct Pokemon *mon = &gParties[B_TRAINER_PLAYER][i];
+        if (GetMonData(mon, MON_DATA_SPECIES) != SPECIES_NONE && !GetMonData(mon, MON_DATA_IS_EGG))
+        {
+            playerLevels[count++] = GetMonData(mon, MON_DATA_LEVEL);
+        }
+    }
+
+    if (count == 0)
+        return 15;
+
+    for (i = 0; i < count; i++)
+    {
+        for (j = i + 1; j < count; j++)
+        {
+            if (playerLevels[j] > playerLevels[i])
+            {
+                u8 temp = playerLevels[i];
+                playerLevels[i] = playerLevels[j];
+                playerLevels[j] = temp;
+            }
+        }
+    }
+
+    u8 considerCount = (count < n) ? count : n;
+    for (i = 0; i < considerCount; i++)
+        sum += playerLevels[i];
+
+    u8 avg = (u8)(sum / considerCount);
+    if (avg < 5)
+        avg = 5;
+    if (avg > MAX_LEVEL)
+        avg = MAX_LEVEL;
+
+    return avg;
+}
+
+static void SetupGymLeaderBattleParty(struct Pokemon *party, u16 trainerNum)
+{
+    u8 gymIndex = 0;
+    u8 badgeCount = GetPlayerBadgeCount();
+    u8 gymStage = badgeCount + 1;
+    u8 partySize;
+    u32 i, j;
+    u16 chosenSpecies[PARTY_SIZE];
+    u8 levels[PARTY_SIZE];
+
+    if (!IsGymLeaderTrainer(trainerNum, &gymIndex) || gymIndex >= ARRAY_COUNT(sGymPools))
+        return;
+
+    if (gymStage > 8)
+        gymStage = 8;
+    if (gymStage < 1)
+        gymStage = 1;
+
+    if (gymStage == 1)
+        partySize = 2;
+    else if (gymStage <= 3)
+        partySize = 3;
+    else if (gymStage <= 5)
+        partySize = 4;
+    else if (gymStage == 6)
+        partySize = 5;
+    else
+        partySize = 6;
+
+    if (partySize > PARTY_SIZE)
+        partySize = PARTY_SIZE;
+
+    const struct GymPoolInfo *gymInfo = &sGymPools[gymIndex];
+    if (gymInfo->acesCount == 0 || gymInfo->poolCount == 0)
+        return;
+
+    // Last slot is the Ace (Gen 3 species guaranteed)
+    chosenSpecies[partySize - 1] = gymInfo->aces[Random() % gymInfo->acesCount];
+
+    // Pick unique non-ace species from theme pool for slots 0 to partySize - 2
+    for (i = 0; i < partySize - 1; i++)
+    {
+        bool32 duplicate;
+        u16 picked;
+        u32 attempts = 0;
+        do
+        {
+            picked = gymInfo->pool[Random() % gymInfo->poolCount];
+            duplicate = (picked == chosenSpecies[partySize - 1]);
+            if (!duplicate)
+            {
+                for (j = 0; j < i; j++)
+                {
+                    if (chosenSpecies[j] == picked)
+                    {
+                        duplicate = TRUE;
+                        break;
+                    }
+                }
+            }
+            attempts++;
+        } while (duplicate && attempts < 100);
+
+        chosenSpecies[i] = picked;
+    }
+
+    // Dynamic Level Scaling
+    u8 avgLevel = CalculatePlayerTopNAverageLevel(partySize);
+    for (i = 0; i < partySize; i++)
+    {
+        s32 monLevel;
+        if (i == partySize - 1)
+        {
+            monLevel = avgLevel + 1 + (gymStage >= 6 ? 1 : 0);
+        }
+        else
+        {
+            s32 spread = (avgLevel >= 30) ? 2 : 1;
+            monLevel = (s32)avgLevel - ((s32)(partySize - 1 - i) * spread);
+        }
+
+        if (monLevel < 5)
+            monLevel = 5;
+        if (monLevel > MAX_LEVEL)
+            monLevel = MAX_LEVEL;
+
+        levels[i] = (u8)monLevel;
+    }
+
+    ZeroPartyMons(party);
+    for (i = 0; i < partySize; i++)
+    {
+        CreateMon(&party[i], chosenSpecies[i], levels[i], Random32(), OTID_STRUCT_RANDOM_NO_SHINY);
+        GiveMonInitialMoveset(&party[i]);
+        u8 iv = 31;
+        SetMonData(&party[i], MON_DATA_HP_IV, &iv);
+        SetMonData(&party[i], MON_DATA_ATK_IV, &iv);
+        SetMonData(&party[i], MON_DATA_DEF_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPEED_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPATK_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPDEF_IV, &iv);
+        CalculateMonStats(&party[i]);
+    }
+}
+
 static bool32 IsRivalInitialBattle(u16 trainerNum)
 {
     return (trainerNum == TRAINER_MAY_ROUTE_103_TREECKO
@@ -2472,6 +3034,12 @@ static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     if (IsRivalInitialBattle(trainerNum))
     {
         SetupRivalInitialBattleParty(party, trainerNum);
+        return;
+    }
+
+    if (IsGymLeaderTrainer(trainerNum, NULL))
+    {
+        SetupGymLeaderBattleParty(party, trainerNum);
         return;
     }
 

@@ -1016,13 +1016,13 @@ static void CB2_GiveStarter(void)
     starterMon = GetStarterPokemon(gSpecialVar_Result);
     ScriptGiveMon(starterMon, 5, ITEM_NONE);
 
-    SetMonData(&gPlayerParty[0], MON_DATA_HP_IV, &maxIv);
-    SetMonData(&gPlayerParty[0], MON_DATA_ATK_IV, &maxIv);
-    SetMonData(&gPlayerParty[0], MON_DATA_DEF_IV, &maxIv);
-    SetMonData(&gPlayerParty[0], MON_DATA_SPEED_IV, &maxIv);
-    SetMonData(&gPlayerParty[0], MON_DATA_SPATK_IV, &maxIv);
-    SetMonData(&gPlayerParty[0], MON_DATA_SPDEF_IV, &maxIv);
-    CalculateMonStats(&gPlayerParty[0]);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_HP_IV, &maxIv);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_ATK_IV, &maxIv);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_DEF_IV, &maxIv);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPEED_IV, &maxIv);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPATK_IV, &maxIv);
+    SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPDEF_IV, &maxIv);
+    CalculateMonStats(&gParties[B_TRAINER_PLAYER][0]);
 
     ResetTasks();
     PlayBattleBGM();
@@ -2343,18 +2343,6 @@ static const u16 sRivalCounterPool[] =
     SPECIES_MILOTIC,
 };
 
-static u16 GetSpeciesBaseStatTotal(enum Species species)
-{
-    if (species >= NUM_SPECIES)
-        return 0;
-    return gSpeciesInfo[species].baseHP
-         + gSpeciesInfo[species].baseAttack
-         + gSpeciesInfo[species].baseDefense
-         + gSpeciesInfo[species].baseSpeed
-         + gSpeciesInfo[species].baseSpAttack
-         + gSpeciesInfo[species].baseSpDefense;
-}
-
 static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
 {
     enum Type pType1, pType2;
@@ -2465,8 +2453,7 @@ static bool32 IsRivalInitialBattle(u16 trainerNum)
 
 static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
 {
-    const struct Trainer *trainer = GetTrainerStructFromId(trainerNum);
-    enum Species playerSpecies = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES);
+    enum Species playerSpecies = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES);
     enum Species counterSpecies;
 
     if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
@@ -2475,7 +2462,7 @@ static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
     counterSpecies = GetRivalCounterSpecies(playerSpecies);
 
     ZeroPartyMons(party);
-    CreateMon(&party[0], counterSpecies, 5, Random32(), trainer->otID);
+    CreateMon(&party[0], counterSpecies, 5, Random32(), OTID_STRUCT_RANDOM_NO_SHINY);
     GiveMonInitialMoveset(&party[0]);
     CalculateMonStats(&party[0]);
 }

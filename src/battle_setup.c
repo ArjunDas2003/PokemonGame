@@ -2976,7 +2976,14 @@ static void SetupGymLeaderBattleParty(struct Pokemon *party, u16 trainerNum)
     ZeroPartyMons(party);
     for (i = 0; i < partySize; i++)
     {
+        u8 blockDynamax = BLOCK_AI_DYNAMAX;
+        bool8 noGmax = FALSE;
+        u8 noTera = TYPE_MYSTERY;
+
         CreateMon(&party[i], chosenSpecies[i], levels[i], Random32(), OTID_STRUCT_RANDOM_NO_SHINY);
+        SetMonData(&party[i], MON_DATA_DYNAMAX_LEVEL, &blockDynamax);
+        SetMonData(&party[i], MON_DATA_GIGANTAMAX_FACTOR, &noGmax);
+        SetMonData(&party[i], MON_DATA_TERA_TYPE, &noTera);
         GiveMonInitialMoveset(&party[i]);
         u8 iv = 31;
         SetMonData(&party[i], MON_DATA_HP_IV, &iv);
@@ -3003,6 +3010,9 @@ static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
 {
     enum Species playerSpecies = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES);
     enum Species counterSpecies;
+    u8 blockDynamax = BLOCK_AI_DYNAMAX;
+    bool8 noGmax = FALSE;
+    u8 noTera = TYPE_MYSTERY;
 
     if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
         playerSpecies = GetStarterPokemon(VarGet(VAR_STARTER_MON));
@@ -3011,6 +3021,9 @@ static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
 
     ZeroPartyMons(party);
     CreateMon(&party[0], counterSpecies, 5, Random32(), OTID_STRUCT_RANDOM_NO_SHINY);
+    SetMonData(&party[0], MON_DATA_DYNAMAX_LEVEL, &blockDynamax);
+    SetMonData(&party[0], MON_DATA_GIGANTAMAX_FACTOR, &noGmax);
+    SetMonData(&party[0], MON_DATA_TERA_TYPE, &noTera);
     GiveMonInitialMoveset(&party[0]);
     CalculateMonStats(&party[0]);
 }

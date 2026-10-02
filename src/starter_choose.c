@@ -10,6 +10,7 @@
 #include "palette.h"
 #include "pokedex.h"
 #include "pokemon.h"
+#include "random.h"
 #include "scanline_effect.h"
 #include "sound.h"
 #include "sprite.h"
@@ -114,7 +115,134 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 #define FIRE_STARTER  (IS_FRLG ? SPECIES_CHARMANDER : SPECIES_TORCHIC)
 #define WATER_STARTER (IS_FRLG ? SPECIES_SQUIRTLE   : SPECIES_MUDKIP )
 
-static const u16 sStarterMon[STARTER_MON_COUNT] =
+static const u16 sThreeStageStarterPool[] =
+{
+    // Gen 1
+    SPECIES_BULBASAUR,
+    SPECIES_CHARMANDER,
+    SPECIES_SQUIRTLE,
+    SPECIES_CATERPIE,
+    SPECIES_WEEDLE,
+    SPECIES_PIDGEY,
+    SPECIES_POLIWAG,
+    SPECIES_ABRA,
+    SPECIES_MACHOP,
+    SPECIES_BELLSPROUT,
+    SPECIES_GEODUDE,
+    SPECIES_GASTLY,
+    SPECIES_RHYHORN,
+    SPECIES_HORSEA,
+    SPECIES_ELEKID,
+    SPECIES_MAGBY,
+    SPECIES_PORYGON,
+    SPECIES_HAPPINY,
+    SPECIES_PICHU,
+    SPECIES_CLEFFA,
+    SPECIES_IGGLYBUFF,
+    SPECIES_ZUBAT,
+    SPECIES_ODDISH,
+    SPECIES_DRATINI,
+    SPECIES_MANKEY,
+
+    // Gen 2
+    SPECIES_CHIKORITA,
+    SPECIES_CYNDAQUIL,
+    SPECIES_TOTODILE,
+    SPECIES_MAREEP,
+    SPECIES_HOPPIP,
+    SPECIES_AZURILL,
+    SPECIES_TOGEPI,
+    SPECIES_SWINUB,
+    SPECIES_LARVITAR,
+
+    // Gen 3
+    SPECIES_TREECKO,
+    SPECIES_TORCHIC,
+    SPECIES_MUDKIP,
+    SPECIES_WURMPLE,
+    SPECIES_LOTAD,
+    SPECIES_SEEDOT,
+    SPECIES_RALTS,
+    SPECIES_SLAKOTH,
+    SPECIES_WHISMUR,
+    SPECIES_ARON,
+    SPECIES_TRAPINCH,
+    SPECIES_SPHEAL,
+    SPECIES_BAGON,
+    SPECIES_BELDUM,
+    SPECIES_DUSKULL,
+    SPECIES_BUDEW,
+
+    // Gen 4
+    SPECIES_TURTWIG,
+    SPECIES_CHIMCHAR,
+    SPECIES_PIPLUP,
+    SPECIES_STARLY,
+    SPECIES_SHINX,
+    SPECIES_GIBLE,
+
+    // Gen 5
+    SPECIES_SNIVY,
+    SPECIES_TEPIG,
+    SPECIES_OSHAWOTT,
+    SPECIES_PIDOVE,
+    SPECIES_ROGGENROLA,
+    SPECIES_TIMBURR,
+    SPECIES_TYMPOLE,
+    SPECIES_SEWADDLE,
+    SPECIES_VENIPEDE,
+    SPECIES_SOLOSIS,
+    SPECIES_VANILLITE,
+    SPECIES_KLINK,
+    SPECIES_TYNAMO,
+    SPECIES_LITWICK,
+    SPECIES_AXEW,
+    SPECIES_DEINO,
+    SPECIES_PAWNIARD,
+
+    // Gen 6
+    SPECIES_CHESPIN,
+    SPECIES_FENNEKIN,
+    SPECIES_FROAKIE,
+    SPECIES_FLETCHLING,
+    SPECIES_SCATTERBUG,
+    SPECIES_FLABEBE,
+    SPECIES_HONEDGE,
+    SPECIES_GOOMY,
+
+    // Gen 7
+    SPECIES_ROWLET,
+    SPECIES_LITTEN,
+    SPECIES_POPPLIO,
+    SPECIES_PIKIPEK,
+    SPECIES_GRUBBIN,
+    SPECIES_BOUNSWEET,
+    SPECIES_JANGMO_O,
+
+    // Gen 8
+    SPECIES_GROOKEY,
+    SPECIES_SCORBUNNY,
+    SPECIES_SOBBLE,
+    SPECIES_ROOKIDEE,
+    SPECIES_BLIPBUG,
+    SPECIES_ROLYCOLY,
+    SPECIES_APPLIN,
+    SPECIES_HATENNA,
+    SPECIES_IMPIDIMP,
+    SPECIES_DREEPY,
+
+    // Gen 9
+    SPECIES_SPRIGATITO,
+    SPECIES_FUECOCO,
+    SPECIES_QUAXLY,
+    SPECIES_PAWMI,
+    SPECIES_SMOLIV,
+    SPECIES_NACLI,
+    SPECIES_TINKATINK,
+    SPECIES_FRIGIBAX,
+};
+
+static u16 sStarterMon[STARTER_MON_COUNT] =
 {
     GRASS_STARTER,
     FIRE_STARTER,
@@ -347,11 +475,55 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 };
 
 // .text
+void GenerateRandomThreeStageStarters(void)
+{
+    u32 i, j;
+    u16 picked;
+    u32 poolSize = ARRAY_COUNT(sThreeStageStarterPool);
+
+    if (poolSize < STARTER_MON_COUNT)
+        return;
+
+    for (i = 0; i < STARTER_MON_COUNT; i++)
+    {
+        bool32 duplicate;
+        do
+        {
+            picked = sThreeStageStarterPool[Random() % poolSize];
+            duplicate = FALSE;
+            for (j = 0; j < i; j++)
+            {
+                if (sStarterMon[j] == picked)
+                {
+                    duplicate = TRUE;
+                    break;
+                }
+            }
+        } while (duplicate);
+
+        sStarterMon[i] = picked;
+    }
+
+    VarSet(VAR_STARTER_SPECIES_0, sStarterMon[0]);
+    VarSet(VAR_STARTER_SPECIES_1, sStarterMon[1]);
+    VarSet(VAR_STARTER_SPECIES_2, sStarterMon[2]);
+}
+
 u16 GetStarterPokemon(u16 chosenStarterId)
 {
-    if (chosenStarterId > STARTER_MON_COUNT)
+    u16 savedSpecies;
+
+    if (chosenStarterId >= STARTER_MON_COUNT)
         chosenStarterId = 0;
-    return sStarterMon[chosenStarterId];
+
+    savedSpecies = VarGet(VAR_STARTER_SPECIES_0 + chosenStarterId);
+    if (savedSpecies != SPECIES_NONE && savedSpecies < NUM_SPECIES)
+        return savedSpecies;
+
+    if (sStarterMon[chosenStarterId] != SPECIES_NONE && sStarterMon[chosenStarterId] < NUM_SPECIES)
+        return sStarterMon[chosenStarterId];
+
+    return (chosenStarterId == 0 ? GRASS_STARTER : (chosenStarterId == 1 ? FIRE_STARTER : WATER_STARTER));
 }
 
 static void VblankCB_StarterChoose(void)
@@ -374,6 +546,8 @@ void CB2_ChooseStarter(void)
 {
     u8 taskId;
     u8 spriteId;
+
+    GenerateRandomThreeStageStarters();
 
     SetVBlankCallback(NULL);
 

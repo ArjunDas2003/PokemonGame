@@ -10,6 +10,8 @@
 #include "battle_partner.h"
 #include "battle_tower.h"
 #include "battle_transition.h"
+#include "battle_util.h"
+#include "fpmath.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
@@ -55,6 +57,7 @@
 #include "constants/event_objects.h"
 #include "constants/game_stat.h"
 #include "constants/items.h"
+#include "constants/opponents.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/trainer_hill.h"
@@ -1007,10 +1010,20 @@ void ChooseStarter(void)
 static void CB2_GiveStarter(void)
 {
     u16 starterMon;
+    u8 maxIv = MAX_PER_STAT_IVS;
 
     *GetVarPointer(VAR_STARTER_MON) = gSpecialVar_Result;
     starterMon = GetStarterPokemon(gSpecialVar_Result);
     ScriptGiveMon(starterMon, 5, ITEM_NONE);
+
+    SetMonData(&gPlayerParty[0], MON_DATA_HP_IV, &maxIv);
+    SetMonData(&gPlayerParty[0], MON_DATA_ATK_IV, &maxIv);
+    SetMonData(&gPlayerParty[0], MON_DATA_DEF_IV, &maxIv);
+    SetMonData(&gPlayerParty[0], MON_DATA_SPEED_IV, &maxIv);
+    SetMonData(&gPlayerParty[0], MON_DATA_SPATK_IV, &maxIv);
+    SetMonData(&gPlayerParty[0], MON_DATA_SPDEF_IV, &maxIv);
+    CalculateMonStats(&gPlayerParty[0]);
+
     ResetTasks();
     PlayBattleBGM();
     SetMainCallback2(CB2_StartFirstBattle);
@@ -2257,8 +2270,224 @@ void CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Traine
     Free(trainerGen);
 }
 
+static const u16 sRivalCounterPool[] =
+{
+    // Pseudo Legendaries (BST 600)
+    SPECIES_DRAGONITE,
+    SPECIES_TYRANITAR,
+    SPECIES_SALAMENCE,
+    SPECIES_METAGROSS,
+    SPECIES_GARCHOMP,
+    SPECIES_HYDREIGON,
+    SPECIES_GOODRA,
+    SPECIES_KOMMO_O,
+    SPECIES_DRAGAPULT,
+    SPECIES_BAXCALIBUR,
+
+    // Starters Final Stages (BST 525 - 535)
+    SPECIES_CHARIZARD,
+    SPECIES_BLASTOISE,
+    SPECIES_VENUSAUR,
+    SPECIES_TYPHLOSION,
+    SPECIES_FERALIGATR,
+    SPECIES_MEGANIUM,
+    SPECIES_BLAZIKEN,
+    SPECIES_SWAMPERT,
+    SPECIES_SCEPTILE,
+    SPECIES_INFERNAPE,
+    SPECIES_EMPOLEON,
+    SPECIES_TORTERRA,
+    SPECIES_GRENINJA,
+    SPECIES_DELPHOX,
+    SPECIES_CHESNAUGHT,
+    SPECIES_INCINEROAR,
+    SPECIES_PRIMARINA,
+    SPECIES_DECIDUEYE,
+    SPECIES_CINDERACE,
+    SPECIES_INTELEON,
+    SPECIES_RILLABOOM,
+    SPECIES_MEOWSCARADA,
+    SPECIES_SKELEDIRGE,
+    SPECIES_QUAQUAVAL,
+
+    // Fully Evolved Powerhouses (BST > 520)
+    SPECIES_ARCANINE,
+    SPECIES_GYARADOS,
+    SPECIES_KINGDRA,
+    SPECIES_SNORLAX,
+    SPECIES_LAPRAS,
+    SPECIES_CLOYSTER,
+    SPECIES_EXEGGUTOR,
+    SPECIES_ELECTIVIRE,
+    SPECIES_MAGMORTAR,
+    SPECIES_MAGNEZONE,
+    SPECIES_TOGEKISS,
+    SPECIES_MAMOSWINE,
+    SPECIES_TANGROWTH,
+    SPECIES_PORYGON_Z,
+    SPECIES_RHYPERIOR,
+    SPECIES_FLORGES,
+    SPECIES_NOIVERN,
+    SPECIES_VOLCARONA,
+    SPECIES_HAXORUS,
+    SPECIES_LUCARIO,
+    SPECIES_GARDEVOIR,
+    SPECIES_GALLADE,
+    SPECIES_KINGAMBIT,
+    SPECIES_GHOLDENGO,
+    SPECIES_ANNIHILAPE,
+    SPECIES_SLAKING,
+    SPECIES_AGGRON,
+    SPECIES_WALREIN,
+    SPECIES_CROBAT,
+    SPECIES_MILOTIC,
+};
+
+static u16 GetSpeciesBaseStatTotal(enum Species species)
+{
+    if (species >= NUM_SPECIES)
+        return 0;
+    return gSpeciesInfo[species].baseHP
+         + gSpeciesInfo[species].baseAttack
+         + gSpeciesInfo[species].baseDefense
+         + gSpeciesInfo[species].baseSpeed
+         + gSpeciesInfo[species].baseSpAttack
+         + gSpeciesInfo[species].baseSpDefense;
+}
+
+static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
+{
+    enum Type pType1, pType2;
+    u32 i;
+    u32 bestScore = 0;
+    enum Species bestCandidates[ARRAY_COUNT(sRivalCounterPool)];
+    u32 numBest = 0;
+
+    if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
+        playerSpecies = SPECIES_TREECKO;
+
+    pType1 = gSpeciesInfo[playerSpecies].types[0];
+    pType2 = gSpeciesInfo[playerSpecies].types[1];
+
+    for (i = 0; i < ARRAY_COUNT(sRivalCounterPool); i++)
+    {
+        enum Species candidate = sRivalCounterPool[i];
+        enum Type cType1, cType2;
+        uq4_12_t cAtk1, cAtk2, bestCAtk;
+        uq4_12_t pAtk1, pAtk2, bestPAtk;
+        u32 score;
+
+        if (candidate >= NUM_SPECIES)
+            continue;
+
+        // Ensure BST is strictly greater than 520
+        if (GetSpeciesBaseStatTotal(candidate) <= 520)
+            continue;
+
+        cType1 = gSpeciesInfo[candidate].types[0];
+        cType2 = gSpeciesInfo[candidate].types[1];
+
+        // How well candidate's STAB attacks hit the player's starter
+        cAtk1 = GetTypeModifier(cType1, pType1);
+        if (pType2 != pType1 && pType2 != TYPE_MYSTERY && pType2 != TYPE_NONE)
+            cAtk1 = uq4_12_multiply(cAtk1, GetTypeModifier(cType1, pType2));
+
+        if (cType2 != cType1 && cType2 != TYPE_MYSTERY && cType2 != TYPE_NONE)
+        {
+            cAtk2 = GetTypeModifier(cType2, pType1);
+            if (pType2 != pType1 && pType2 != TYPE_MYSTERY && pType2 != TYPE_NONE)
+                cAtk2 = uq4_12_multiply(cAtk2, GetTypeModifier(cType2, pType2));
+            bestCAtk = (cAtk2 > cAtk1) ? cAtk2 : cAtk1;
+        }
+        else
+        {
+            bestCAtk = cAtk1;
+        }
+
+        // How well player's STAB attacks hit the candidate
+        pAtk1 = GetTypeModifier(pType1, cType1);
+        if (cType2 != cType1 && cType2 != TYPE_MYSTERY && cType2 != TYPE_NONE)
+            pAtk1 = uq4_12_multiply(pAtk1, GetTypeModifier(pType1, cType2));
+
+        if (pType2 != pType1 && pType2 != TYPE_MYSTERY && pType2 != TYPE_NONE)
+        {
+            pAtk2 = GetTypeModifier(pType2, cType1);
+            if (cType2 != cType1 && cType2 != TYPE_MYSTERY && cType2 != TYPE_NONE)
+                pAtk2 = uq4_12_multiply(pAtk2, GetTypeModifier(pType2, cType2));
+            bestPAtk = (pAtk2 > pAtk1) ? pAtk2 : pAtk1;
+        }
+        else
+        {
+            bestPAtk = pAtk1;
+        }
+
+        // Score based on offensive and defensive type matchup
+        if (bestCAtk >= UQ_4_12(2.0) && bestPAtk <= UQ_4_12(0.5))
+            score = 1000 + (bestCAtk >> 4) - (bestPAtk >> 4);
+        else if (bestCAtk >= UQ_4_12(2.0) && bestPAtk <= UQ_4_12(1.0))
+            score = 800 + (bestCAtk >> 4) - (bestPAtk >> 4);
+        else if (bestCAtk >= UQ_4_12(2.0))
+            score = 600 + (bestCAtk >> 4) - (bestPAtk >> 4);
+        else if (bestPAtk <= UQ_4_12(0.5))
+            score = 400 + (bestCAtk >> 4);
+        else if (bestPAtk <= UQ_4_12(1.0))
+            score = 300 + (bestCAtk >> 4);
+        else
+            score = 100 + (bestCAtk >> 4);
+
+        if (score > bestScore)
+        {
+            bestScore = score;
+            numBest = 0;
+            bestCandidates[numBest++] = candidate;
+        }
+        else if (score == bestScore && numBest < ARRAY_COUNT(bestCandidates))
+        {
+            bestCandidates[numBest++] = candidate;
+        }
+    }
+
+    if (numBest > 0)
+        return bestCandidates[Random() % numBest];
+
+    return SPECIES_DRAGONITE;
+}
+
+static bool32 IsRivalInitialBattle(u16 trainerNum)
+{
+    return (trainerNum == TRAINER_MAY_ROUTE_103_TREECKO
+         || trainerNum == TRAINER_MAY_ROUTE_103_TORCHIC
+         || trainerNum == TRAINER_MAY_ROUTE_103_MUDKIP
+         || trainerNum == TRAINER_BRENDAN_ROUTE_103_TREECKO
+         || trainerNum == TRAINER_BRENDAN_ROUTE_103_TORCHIC
+         || trainerNum == TRAINER_BRENDAN_ROUTE_103_MUDKIP);
+}
+
+static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
+{
+    const struct Trainer *trainer = GetTrainerStructFromId(trainerNum);
+    enum Species playerSpecies = GetMonData(&gPlayerParty[0], MON_DATA_SPECIES);
+    enum Species counterSpecies;
+
+    if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
+        playerSpecies = GetStarterPokemon(VarGet(VAR_STARTER_MON));
+
+    counterSpecies = GetRivalCounterSpecies(playerSpecies);
+
+    ZeroPartyMons(party);
+    CreateMon(&party[0], counterSpecies, 5, Random32(), trainer->otID);
+    GiveMonInitialMoveset(&party[0]);
+    CalculateMonStats(&party[0]);
+}
+
 static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
+    if (IsRivalInitialBattle(trainerNum))
+    {
+        SetupRivalInitialBattleParty(party, trainerNum);
+        return;
+    }
+
     if (!GetTrainerStructFromId(trainerNum)->overrideTrainer)
     {
         CreateNPCTrainerPartyFromTrainer(party, GetTrainerStructFromId(trainerNum));

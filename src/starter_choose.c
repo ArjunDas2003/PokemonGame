@@ -242,7 +242,7 @@ static const u16 sThreeStageStarterPool[] =
     SPECIES_FRIGIBAX,
 };
 
-static u16 sStarterMon[STARTER_MON_COUNT] =
+static const u16 sStarterMon[STARTER_MON_COUNT] =
 {
     GRASS_STARTER,
     FIRE_STARTER,
@@ -478,7 +478,7 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
 void GenerateRandomThreeStageStarters(void)
 {
     u32 i, j;
-    u16 picked;
+    u16 starters[STARTER_MON_COUNT];
     u32 poolSize = ARRAY_COUNT(sThreeStageStarterPool);
 
     if (poolSize < STARTER_MON_COUNT)
@@ -487,13 +487,14 @@ void GenerateRandomThreeStageStarters(void)
     for (i = 0; i < STARTER_MON_COUNT; i++)
     {
         bool32 duplicate;
+        u16 picked;
         do
         {
             picked = sThreeStageStarterPool[Random() % poolSize];
             duplicate = FALSE;
             for (j = 0; j < i; j++)
             {
-                if (sStarterMon[j] == picked)
+                if (starters[j] == picked)
                 {
                     duplicate = TRUE;
                     break;
@@ -501,12 +502,12 @@ void GenerateRandomThreeStageStarters(void)
             }
         } while (duplicate);
 
-        sStarterMon[i] = picked;
+        starters[i] = picked;
     }
 
-    VarSet(VAR_STARTER_SPECIES_0, sStarterMon[0]);
-    VarSet(VAR_STARTER_SPECIES_1, sStarterMon[1]);
-    VarSet(VAR_STARTER_SPECIES_2, sStarterMon[2]);
+    VarSet(VAR_STARTER_SPECIES_0, starters[0]);
+    VarSet(VAR_STARTER_SPECIES_1, starters[1]);
+    VarSet(VAR_STARTER_SPECIES_2, starters[2]);
 }
 
 u16 GetStarterPokemon(u16 chosenStarterId)
@@ -520,10 +521,7 @@ u16 GetStarterPokemon(u16 chosenStarterId)
     if (savedSpecies != SPECIES_NONE && savedSpecies < NUM_SPECIES)
         return savedSpecies;
 
-    if (sStarterMon[chosenStarterId] != SPECIES_NONE && sStarterMon[chosenStarterId] < NUM_SPECIES)
-        return sStarterMon[chosenStarterId];
-
-    return (chosenStarterId == 0 ? GRASS_STARTER : (chosenStarterId == 1 ? FIRE_STARTER : WATER_STARTER));
+    return sStarterMon[chosenStarterId];
 }
 
 static void VblankCB_StarterChoose(void)

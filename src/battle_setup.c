@@ -1011,11 +1011,11 @@ void ChooseStarter(void)
     gMain.savedCallback = CB2_GiveStarter;
 }
 
-static u16 GetBestOffensiveEggMove(enum Species species)
+static u16 GetRandomOffensiveEggMove(enum Species species)
 {
     const u16 *eggMoves = GetSpeciesEggMoves(species);
-    u16 bestMove = MOVE_NONE;
-    u32 bestPower = 0;
+    u16 offensiveMoves[50];
+    u32 count = 0;
     u32 i;
 
     if (eggMoves != NULL)
@@ -1025,50 +1025,44 @@ static u16 GetBestOffensiveEggMove(enum Species species)
             u16 move = eggMoves[i];
             if (move != MOVE_NONE && move < MOVES_COUNT)
             {
-                if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS)
+                if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS && count < ARRAY_COUNT(offensiveMoves))
                 {
-                    u32 power = GetMovePower(move);
-                    if (power > bestPower)
-                    {
-                        bestPower = power;
-                        bestMove = move;
-                    }
+                    offensiveMoves[count++] = move;
                 }
             }
         }
     }
 
-    if (bestMove == MOVE_NONE)
+    if (count > 0)
+        return offensiveMoves[Random() % count];
+
+    // Fallback: if no attacking egg moves found, pick randomly from teachable learnset
+    const u16 *teachables = GetSpeciesTeachableLearnset(species);
+    if (teachables != NULL)
     {
-        const u16 *teachables = GetSpeciesTeachableLearnset(species);
-        if (teachables != NULL)
+        for (i = 0; teachables[i] != MOVE_UNAVAILABLE && teachables[i] != MOVE_NONE && i < 100; i++)
         {
-            for (i = 0; teachables[i] != MOVE_UNAVAILABLE && teachables[i] != MOVE_NONE && i < 100; i++)
+            u16 move = teachables[i];
+            if (move != MOVE_NONE && move < MOVES_COUNT)
             {
-                u16 move = teachables[i];
-                if (move != MOVE_NONE && move < MOVES_COUNT)
+                if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS && count < ARRAY_COUNT(offensiveMoves))
                 {
-                    if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS)
-                    {
-                        u32 power = GetMovePower(move);
-                        if (power > bestPower)
-                        {
-                            bestPower = power;
-                            bestMove = move;
-                        }
-                    }
+                    offensiveMoves[count++] = move;
                 }
             }
         }
     }
 
-    return bestMove;
+    if (count > 0)
+        return offensiveMoves[Random() % count];
+
+    return MOVE_NONE;
 }
 
 static void AssignStarterOffensiveEggMove(struct Pokemon *mon)
 {
     enum Species species = GetMonData(mon, MON_DATA_SPECIES);
-    u16 eggMove = GetBestOffensiveEggMove(species);
+    u16 eggMove = GetRandomOffensiveEggMove(species);
 
     if (eggMove != MOVE_NONE)
     {

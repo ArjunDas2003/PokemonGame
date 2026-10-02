@@ -1552,10 +1552,10 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
     [SPECIES_THIEVUL] =
     {
         .baseHP        = 70,
-        .baseAttack    = 58,
+        .baseAttack    = 55,
         .baseDefense   = 58,
-        .baseSpeed     = 90,
-        .baseSpAttack  = 87,
+        .baseSpeed     = 95,
+        .baseSpAttack  = 90,
         .baseSpDefense = 92,
         .types = MON_TYPES(TYPE_DARK),
         .catchRate = 127,
@@ -5390,7 +5390,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
 #if P_FAMILY_PINCURCHIN
     [SPECIES_PINCURCHIN] =
     {
-        .baseHP        = 48,
+        .baseHP        = 53,
         .baseAttack    = 101,
         .baseDefense   = 95,
         .baseSpeed     = 15,
@@ -5604,7 +5604,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .baseDefense   = 135,
         .baseSpeed     = 70,
         .baseSpAttack  = 20,
-        .baseSpDefense = 20,
+        .baseSpDefense = 25,
         .types = MON_TYPES(TYPE_ROCK),
         .catchRate = 60,
         .expYield = 165,

@@ -973,11 +973,11 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
     [SPECIES_GUMSHOOS] =
     {
         .baseHP        = 88,
-        .baseAttack    = 110,
-        .baseDefense   = 60,
+        .baseAttack    = 112,
+        .baseDefense   = 64,
         .baseSpeed     = 45,
-        .baseSpAttack  = 55,
-        .baseSpDefense = 60,
+        .baseSpAttack  = 50,
+        .baseSpDefense = 64,
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 127,
         .expYield = 146,
@@ -1238,9 +1238,9 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
     [SPECIES_VIKAVOLT] =
     {
         .baseHP        = 77,
-        .baseAttack    = 70,
+        .baseAttack    = 55,
         .baseDefense   = 90,
-        .baseSpeed     = 43,
+        .baseSpeed     = 58,
         .baseSpAttack  = 145,
         .baseSpDefense = 75,
         .types = MON_TYPES(TYPE_BUG, TYPE_ELECTRIC),
@@ -1435,10 +1435,10 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
     {
         .baseHP        = 97,
         .baseAttack    = 132,
-        .baseDefense   = 77,
-        .baseSpeed     = 43,
-        .baseSpAttack  = 62,
-        .baseSpDefense = 67,
+        .baseDefense   = 80,
+        .baseSpeed     = 46,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 70,
         .types = MON_TYPES(TYPE_FIGHTING, TYPE_ICE),
         .catchRate = 60,
         .expYield = 167,
@@ -3299,7 +3299,7 @@ const struct SpeciesInfo gSpeciesInfoGen7[] =
 
     [SPECIES_SHIINOTIC] =
     {
-        .baseHP        = 60,
+        .baseHP        = 65,
         .baseAttack    = 45,
         .baseDefense   = 80,
         .baseSpeed     = 30,

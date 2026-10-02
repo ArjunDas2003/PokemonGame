@@ -931,12 +931,12 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
 
     [SPECIES_WATCHOG] =
     {
-        .baseHP        = 60,
-        .baseAttack    = 85,
-        .baseDefense   = 69,
-        .baseSpeed     = 77,
-        .baseSpAttack  = 60,
-        .baseSpDefense = 69,
+        .baseHP        = 65,
+        .baseAttack    = 88,
+        .baseDefense   = 70,
+        .baseSpeed     = 82,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 70,
         .types = MON_TYPES(TYPE_NORMAL),
         .catchRate = 255,
         .expYield = 147,
@@ -1295,11 +1295,11 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
     [SPECIES_LIEPARD] =
     {
         .baseHP        = 64,
-        .baseAttack    = 88,
-        .baseDefense   = 50,
-        .baseSpeed     = 106,
-        .baseSpAttack  = 88,
-        .baseSpDefense = 50,
+        .baseAttack    = 90,
+        .baseDefense   = 52,
+        .baseSpeed     = 110,
+        .baseSpAttack  = 80,
+        .baseSpDefense = 52,
         .types = MON_TYPES(TYPE_DARK),
         .catchRate = 90,
         .expYield = 156,
@@ -2067,10 +2067,10 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
     [SPECIES_UNFEZANT] =
     {
         .baseHP        = 80,
-        .baseAttack    = P_UPDATED_STATS >= GEN_6 ? 115 : 105,
+        .baseAttack    = 115,
         .baseDefense   = 80,
-        .baseSpeed     = 93,
-        .baseSpAttack  = 65,
+        .baseSpeed     = 103,
+        .baseSpAttack  = 55,
         .baseSpDefense = 55,
         .types = MON_TYPES(TYPE_NORMAL, TYPE_FLYING),
         .catchRate = 45,
@@ -2623,10 +2623,10 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
     [SPECIES_SWOOBAT] =
     {
         .baseHP        = 67,
-        .baseAttack    = 57,
+        .baseAttack    = 55,
         .baseDefense   = 55,
         .baseSpeed     = 114,
-        .baseSpAttack  = 77,
+        .baseSpAttack  = 82,
         .baseSpDefense = 55,
         .types = MON_TYPES(TYPE_PSYCHIC, TYPE_FLYING),
         .catchRate = 45,
@@ -5445,10 +5445,10 @@ const struct SpeciesInfo gSpeciesInfoGen5[] =
     {
         .baseHP        = 75,
         .baseAttack    = 86,
-        .baseDefense   = 67,
-        .baseSpeed     = 60,
+        .baseDefense   = 70,
+        .baseSpeed     = 63,
         .baseSpAttack  = 106,
-        .baseSpDefense = 67,
+        .baseSpDefense = 70,
         .types = MON_TYPES(TYPE_GRASS),
         .catchRate = 255,
         .expYield = 161,

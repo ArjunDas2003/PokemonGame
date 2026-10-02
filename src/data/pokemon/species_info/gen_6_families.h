@@ -1018,10 +1018,10 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
     [SPECIES_DIGGERSBY] =
     {
         .baseHP        = 85,
-        .baseAttack    = 56,
+        .baseAttack    = 60,
         .baseDefense   = 77,
-        .baseSpeed     = 78,
-        .baseSpAttack  = 50,
+        .baseSpeed     = 80,
+        .baseSpAttack  = 45,
         .baseSpDefense = 77,
         .types = MON_TYPES(TYPE_NORMAL, TYPE_GROUND),
         .catchRate = 127,
@@ -2645,10 +2645,10 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
 #define FURFROU_MISC_INFO(_form, _noFlip, frontWidth, frontYOffset, backWidth, backYOffset, _iconIdx, _overworldAnim)   \
     {                                                                                                                   \
         .baseHP        = 75,                                                                                            \
-        .baseAttack    = 80,                                                                                            \
+        .baseAttack    = 85,                                                                                            \
         .baseDefense   = 60,                                                                                            \
         .baseSpeed     = 102,                                                                                           \
-        .baseSpAttack  = 65,                                                                                            \
+        .baseSpAttack  = 60,                                                                                            \
         .baseSpDefense = 90,                                                                                            \
         .types = MON_TYPES(TYPE_NORMAL),                                                                                \
         .catchRate = 160,                                                                                               \
@@ -5583,11 +5583,11 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
     [SPECIES_TREVENANT] =
     {
         .baseHP        = 85,
-        .baseAttack    = 110,
-        .baseDefense   = 76,
+        .baseAttack    = 112,
+        .baseDefense   = 78,
         .baseSpeed     = 56,
-        .baseSpAttack  = 65,
-        .baseSpDefense = 82,
+        .baseSpAttack  = 60,
+        .baseSpDefense = 84,
         .types = MON_TYPES(TYPE_GHOST, TYPE_GRASS),
         .catchRate = 60,
         .expYield = 166,
@@ -5921,12 +5921,12 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
 
     [SPECIES_GOURGEIST_AVERAGE] =
     {
-        .baseHP        = 65,
+        .baseHP        = 70,
         .baseAttack    = 90,
         .baseDefense   = 122,
         .baseSpeed     = 84,
-        .baseSpAttack  = 58,
-        .baseSpDefense = 75,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 78,
         .types = MON_TYPES(TYPE_GHOST, TYPE_GRASS),
         .catchRate = 60,
         .expYield = 173,
@@ -5985,12 +5985,12 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
 
     [SPECIES_GOURGEIST_SMALL] =
     {
-        .baseHP        = 55,
+        .baseHP        = 60,
         .baseAttack    = 85,
         .baseDefense   = 122,
         .baseSpeed     = 99,
-        .baseSpAttack  = 58,
-        .baseSpDefense = 75,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 78,
         .types = MON_TYPES(TYPE_GHOST, TYPE_GRASS),
         .catchRate = 60,
         .expYield = 173,
@@ -6049,12 +6049,12 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
 
     [SPECIES_GOURGEIST_LARGE] =
     {
-        .baseHP        = 75,
+        .baseHP        = 80,
         .baseAttack    = 95,
         .baseDefense   = 122,
         .baseSpeed     = 69,
-        .baseSpAttack  = 58,
-        .baseSpDefense = 75,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 78,
         .types = MON_TYPES(TYPE_GHOST, TYPE_GRASS),
         .catchRate = 60,
         .expYield = 173,
@@ -6113,12 +6113,12 @@ const struct SpeciesInfo gSpeciesInfoGen6[] =
 
     [SPECIES_GOURGEIST_SUPER] =
     {
-        .baseHP        = 85,
+        .baseHP        = 90,
         .baseAttack    = 100,
         .baseDefense   = 122,
         .baseSpeed     = 54,
-        .baseSpAttack  = 58,
-        .baseSpDefense = 75,
+        .baseSpAttack  = 55,
+        .baseSpDefense = 78,
         .types = MON_TYPES(TYPE_GHOST, TYPE_GRASS),
         .catchRate = 60,
         .expYield = 173,

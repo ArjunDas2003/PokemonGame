@@ -7,6 +7,9 @@ extern const u32 gBirchGrassTilemap[];
 extern const u32 gBirchBagGrass_Gfx[];
 extern const u32 gPokeballSelection_Gfx[];
 
+extern const u16 gThreeStageStarterPool[];
+u32 GetThreeStageStarterPoolCount(void);
+
 u16 GetStarterPokemon(u16 chosenStarterId);
 void GenerateRandomThreeStageStarters(void);
 void CB2_ChooseStarter(void);

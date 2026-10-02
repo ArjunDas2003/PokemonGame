@@ -32,6 +32,7 @@
 #include "malloc.h"
 #include "metatile_behavior.h"
 #include "mirage_tower.h"
+#include "move.h"
 #include "palette.h"
 #include "random.h"
 #include "safari_zone.h"
@@ -1010,6 +1011,72 @@ void ChooseStarter(void)
     gMain.savedCallback = CB2_GiveStarter;
 }
 
+static u16 GetBestOffensiveEggMove(enum Species species)
+{
+    const u16 *eggMoves = GetSpeciesEggMoves(species);
+    u16 bestMove = MOVE_NONE;
+    u32 bestPower = 0;
+    u32 i;
+
+    if (eggMoves != NULL)
+    {
+        for (i = 0; eggMoves[i] != MOVE_UNAVAILABLE && eggMoves[i] != MOVE_NONE && i < 50; i++)
+        {
+            u16 move = eggMoves[i];
+            if (move != MOVE_NONE && move < MOVES_COUNT)
+            {
+                if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS)
+                {
+                    u32 power = GetMovePower(move);
+                    if (power > bestPower)
+                    {
+                        bestPower = power;
+                        bestMove = move;
+                    }
+                }
+            }
+        }
+    }
+
+    if (bestMove == MOVE_NONE)
+    {
+        const u16 *teachables = GetSpeciesTeachableLearnset(species);
+        if (teachables != NULL)
+        {
+            for (i = 0; teachables[i] != MOVE_UNAVAILABLE && teachables[i] != MOVE_NONE && i < 100; i++)
+            {
+                u16 move = teachables[i];
+                if (move != MOVE_NONE && move < MOVES_COUNT)
+                {
+                    if (GetMoveCategory(move) != DAMAGE_CATEGORY_STATUS)
+                    {
+                        u32 power = GetMovePower(move);
+                        if (power > bestPower)
+                        {
+                            bestPower = power;
+                            bestMove = move;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return bestMove;
+}
+
+static void AssignStarterOffensiveEggMove(struct Pokemon *mon)
+{
+    enum Species species = GetMonData(mon, MON_DATA_SPECIES);
+    u16 eggMove = GetBestOffensiveEggMove(species);
+
+    if (eggMove != MOVE_NONE)
+    {
+        if (GiveMoveToMon(mon, eggMove) == MON_HAS_MAX_MOVES)
+            DeleteFirstMoveAndGiveMoveToMon(mon, eggMove);
+    }
+}
+
 static void CB2_GiveStarter(void)
 {
     u16 starterMon;
@@ -1025,6 +1092,7 @@ static void CB2_GiveStarter(void)
     SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPEED_IV, &maxIv);
     SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPATK_IV, &maxIv);
     SetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPDEF_IV, &maxIv);
+    AssignStarterOffensiveEggMove(&gParties[B_TRAINER_PLAYER][0]);
     CalculateMonStats(&gParties[B_TRAINER_PLAYER][0]);
 
     ResetTasks();
@@ -2289,85 +2357,13 @@ void CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Traine
     Free(trainerGen);
 }
 
-static const u16 sRivalCounterPool[] =
-{
-    // Pseudo Legendaries (BST 600)
-    SPECIES_DRAGONITE,
-    SPECIES_TYRANITAR,
-    SPECIES_SALAMENCE,
-    SPECIES_METAGROSS,
-    SPECIES_GARCHOMP,
-    SPECIES_HYDREIGON,
-    SPECIES_GOODRA,
-    SPECIES_KOMMO_O,
-    SPECIES_DRAGAPULT,
-    SPECIES_BAXCALIBUR,
-
-    // Starters Final Stages (BST 525 - 535)
-    SPECIES_CHARIZARD,
-    SPECIES_BLASTOISE,
-    SPECIES_VENUSAUR,
-    SPECIES_TYPHLOSION,
-    SPECIES_FERALIGATR,
-    SPECIES_MEGANIUM,
-    SPECIES_BLAZIKEN,
-    SPECIES_SWAMPERT,
-    SPECIES_SCEPTILE,
-    SPECIES_INFERNAPE,
-    SPECIES_EMPOLEON,
-    SPECIES_TORTERRA,
-    SPECIES_GRENINJA,
-    SPECIES_DELPHOX,
-    SPECIES_CHESNAUGHT,
-    SPECIES_INCINEROAR,
-    SPECIES_PRIMARINA,
-    SPECIES_DECIDUEYE,
-    SPECIES_CINDERACE,
-    SPECIES_INTELEON,
-    SPECIES_RILLABOOM,
-    SPECIES_MEOWSCARADA,
-    SPECIES_SKELEDIRGE,
-    SPECIES_QUAQUAVAL,
-
-    // Fully Evolved Powerhouses (BST > 520)
-    SPECIES_ARCANINE,
-    SPECIES_GYARADOS,
-    SPECIES_KINGDRA,
-    SPECIES_SNORLAX,
-    SPECIES_LAPRAS,
-    SPECIES_CLOYSTER,
-    SPECIES_EXEGGUTOR,
-    SPECIES_ELECTIVIRE,
-    SPECIES_MAGMORTAR,
-    SPECIES_MAGNEZONE,
-    SPECIES_TOGEKISS,
-    SPECIES_MAMOSWINE,
-    SPECIES_TANGROWTH,
-    SPECIES_PORYGON_Z,
-    SPECIES_RHYPERIOR,
-    SPECIES_FLORGES,
-    SPECIES_NOIVERN,
-    SPECIES_VOLCARONA,
-    SPECIES_HAXORUS,
-    SPECIES_LUCARIO,
-    SPECIES_GARDEVOIR,
-    SPECIES_GALLADE,
-    SPECIES_KINGAMBIT,
-    SPECIES_GHOLDENGO,
-    SPECIES_ANNIHILAPE,
-    SPECIES_SLAKING,
-    SPECIES_AGGRON,
-    SPECIES_WALREIN,
-    SPECIES_CROBAT,
-    SPECIES_MILOTIC,
-};
-
 static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
 {
     enum Type pType1, pType2;
     u32 i;
     u32 bestScore = 0;
-    enum Species bestCandidates[ARRAY_COUNT(sRivalCounterPool)];
+    u32 poolCount = GetThreeStageStarterPoolCount();
+    enum Species bestCandidates[poolCount];
     u32 numBest = 0;
 
     if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
@@ -2376,19 +2372,15 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
     pType1 = gSpeciesInfo[playerSpecies].types[0];
     pType2 = gSpeciesInfo[playerSpecies].types[1];
 
-    for (i = 0; i < ARRAY_COUNT(sRivalCounterPool); i++)
+    for (i = 0; i < poolCount; i++)
     {
-        enum Species candidate = sRivalCounterPool[i];
+        enum Species candidate = gThreeStageStarterPool[i];
         enum Type cType1, cType2;
         uq4_12_t cAtk1, cAtk2, bestCAtk;
         uq4_12_t pAtk1, pAtk2, bestPAtk;
         u32 score;
 
-        if (candidate >= NUM_SPECIES)
-            continue;
-
-        // Ensure BST is strictly greater than 520
-        if (GetSpeciesBaseStatTotal(candidate) <= 520)
+        if (candidate == SPECIES_NONE || candidate >= NUM_SPECIES || candidate == playerSpecies)
             continue;
 
         cType1 = gSpeciesInfo[candidate].types[0];
@@ -2448,7 +2440,7 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
             numBest = 0;
             bestCandidates[numBest++] = candidate;
         }
-        else if (score == bestScore && numBest < ARRAY_COUNT(bestCandidates))
+        else if (score == bestScore && numBest < poolCount)
         {
             bestCandidates[numBest++] = candidate;
         }
@@ -2457,7 +2449,7 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
     if (numBest > 0)
         return bestCandidates[Random() % numBest];
 
-    return SPECIES_DRAGONITE;
+    return (pType1 == TYPE_GRASS ? SPECIES_TORCHIC : (pType1 == TYPE_FIRE ? SPECIES_MUDKIP : SPECIES_TREECKO));
 }
 
 // Gym Dynamic Scaling Pools

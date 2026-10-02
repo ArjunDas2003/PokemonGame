@@ -115,7 +115,7 @@ static const u8 sStarterLabelCoords[STARTER_MON_COUNT][2] =
 #define FIRE_STARTER  (IS_FRLG ? SPECIES_CHARMANDER : SPECIES_TORCHIC)
 #define WATER_STARTER (IS_FRLG ? SPECIES_SQUIRTLE   : SPECIES_MUDKIP )
 
-static const u16 sThreeStageStarterPool[] =
+const u16 gThreeStageStarterPool[] =
 {
     // Gen 1
     SPECIES_BULBASAUR,
@@ -474,12 +474,17 @@ static const struct SpriteTemplate sSpriteTemplate_StarterCircle =
     .callback = SpriteCB_StarterPokemon
 };
 
+u32 GetThreeStageStarterPoolCount(void)
+{
+    return ARRAY_COUNT(gThreeStageStarterPool);
+}
+
 // .text
 void GenerateRandomThreeStageStarters(void)
 {
     u32 i, j;
     u16 starters[STARTER_MON_COUNT];
-    u32 poolSize = ARRAY_COUNT(sThreeStageStarterPool);
+    u32 poolSize = ARRAY_COUNT(gThreeStageStarterPool);
 
     if (poolSize < STARTER_MON_COUNT)
         return;
@@ -490,7 +495,7 @@ void GenerateRandomThreeStageStarters(void)
         u16 picked;
         do
         {
-            picked = sThreeStageStarterPool[Random() % poolSize];
+            picked = gThreeStageStarterPool[Random() % poolSize];
             duplicate = FALSE;
             for (j = 0; j < i; j++)
             {

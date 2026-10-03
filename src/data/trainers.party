@@ -4608,34 +4608,42 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 Shiftry
 Level: 65
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Torment
-- Double Team
-- Swagger
+- Leaf Blade
 - Extrasensory
+- Dark Pulse
+- Swagger
 
 Cacturne
 Level: 65
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Leech Seed
-- Feint Attack
+- Spiky Shield
 - Needle Arm
-- Cotton Spore
+- Sucker Punch
+- Poison Jab
 
 Crawdaunt
 Level: 66
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Surf
+- Crabhammer
+- Crunch
 - Swords Dance
-- Strength
-- Facade
+- Aqua Jet
+
+Houndoom
+Level: 66
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Flamethrower
+- Dark Pulse
+- Nasty Plot
+- Sludge Bomb
 
 Absol @ Sitrus Berry
 Level: 68
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Aerial Ace
-- Rock Slide
+- Night Slash
 - Swords Dance
-- Slash
+- Psycho Cut
+- Play Rough
 
 === TRAINER_PHOEBE ===
 Name: PHOEBE
@@ -4653,39 +4661,47 @@ Level: 67
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Punch
 - Confuse Ray
-- Curse
+- Will O Wisp
 - Protect
 
 Banette
 Level: 68
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Grudge
-- Will O Wisp
-- Feint Attack
+- Shadow Sneak
+- Gunk Shot
+- Phantom Force
+- Sucker Punch
 
 Sableye
 Level: 68
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Double Team
-- Night Shade
-- Feint Attack
+- Shadow Sneak
+- Recover
+- Foul Play
+- Toxic
 
-Banette
+Mismagius
 Level: 69
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Ball
-- Psychic
-- Thunderbolt
-- Facade
+- Mystical Fire
+- Power Gem
+- Dazzling Gleam
 
-Dusclops @ Sitrus Berry
+Gengar
+Level: 70
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Shadow Ball
+- Sludge Bomb
+- Thunderbolt
+- Focus Blast
+
+Dusknoir @ Sitrus Berry
 Level: 71
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Shadow Ball
-- Ice Beam
-- Rock Slide
+- Shadow Punch
+- Ice Punch
+- Fire Punch
 - Earthquake
 
 === TRAINER_GLACIA ===
@@ -4699,37 +4715,45 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Pink
 
-Sealeo
+Glalie
 Level: 71
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Encore
-- Body Slam
-- Hail
-- Ice Ball
-
-Glalie
-Level: 72
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Light Screen
+- Freeze Dry
 - Crunch
-- Icy Wind
 - Ice Beam
+- Shadow Ball
 
-Sealeo
+Froslass
 Level: 72
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Attract
-- Double Edge
-- Hail
 - Blizzard
+- Shadow Ball
+- Draining Kiss
+- Destiny Bond
 
-Glalie
+Lapras
+Level: 72
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Surf
+- Ice Beam
+- Thunderbolt
+- Sing
+
+Mamoswine
 Level: 73
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Ball
-- Explosion
-- Hail
-- Ice Beam
+- Icicle Crash
+- Earthquake
+- Ice Shard
+- Stone Edge
+
+Weavile
+Level: 74
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Ice Spinner
+- Night Slash
+- Poison Jab
+- Swords Dance
 
 Walrein @ Sitrus Berry
 Level: 75
@@ -4761,26 +4785,34 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 Altaria
 Level: 75
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Edge
-- Dragon Breath
 - Dragon Dance
+- Dragon Claw
 - Aerial Ace
+- Earthquake
 
 Kingdra
 Level: 76
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Smokescreen
-- Dragon Dance
-- Surf
-- Body Slam
+- Hydro Pump
+- Dragon Pulse
+- Ice Beam
+- Flash Cannon
 
 Flygon
 Level: 76
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Earthquake
+- Dragon Claw
 - Flamethrower
 - Crunch
-- Dragon Breath
-- Earthquake
+
+Haxorus
+Level: 77
+IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+- Dragon Dance
+- Outrage
+- Poison Jab
+- Close Combat
 
 Salamence @ Sitrus Berry
 Level: 78

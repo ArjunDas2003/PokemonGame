@@ -227,7 +227,7 @@ BattleColosseum_2P_Movement_PlayerWalkToBox:
 BattleColosseum_2P_Text_AnnounceRound1:
 	.string "REFEREE: Welcome to the EVER GRANDE\n"
 	.string "CONFERENCE TOURNAMENT!\p"
-	.string "This is GROUP STAGE: MATCH 1!\n"
+	.string "GROUP STAGE: MATCH 1 - 3-on-3 Battle!\n"
 	.string "{PLAYER} versus ACE TRAINER KAITO!\p"
 	.string "Trainers, bring forth your POKéMON!$"
 
@@ -241,7 +241,7 @@ BattleColosseum_2P_Text_Round1Defeat:
 
 BattleColosseum_2P_Text_AnnounceRound2:
 	.string "REFEREE: Welcome back to the arena!\p"
-	.string "This is GROUP STAGE: MATCH 2!\n"
+	.string "GROUP STAGE: MATCH 2 - 3-on-3 Battle!\n"
 	.string "{PLAYER} versus EXPERT HIROSHI!\p"
 	.string "Let the battle commence!$"
 
@@ -255,6 +255,7 @@ BattleColosseum_2P_Text_Round2Defeat:
 BattleColosseum_2P_Text_AnnounceRound3:
 	.string "REFEREE: The Group Stage has concluded!\p"
 	.string "Welcome to the KNOCKOUT QUARTER-FINALS!\n"
+	.string "Full 6-on-6 Single Battle!\p"
 	.string "{PLAYER} versus DRAGON TAMER RYUTO!$"
 
 BattleColosseum_2P_Text_Round3Intro:
@@ -267,6 +268,7 @@ BattleColosseum_2P_Text_Round3Defeat:
 BattleColosseum_2P_Text_AnnounceRound4:
 	.string "REFEREE: The tension is electrifying!\p"
 	.string "This is the KNOCKOUT SEMI-FINALS!\n"
+	.string "Full 6-on-6 Single Battle!\p"
 	.string "{PLAYER} versus VETERAN JON!\p"
 	.string "Winner advances to the GRAND FINALS!$"
 
@@ -280,6 +282,7 @@ BattleColosseum_2P_Text_Round4Defeat:
 BattleColosseum_2P_Text_AnnounceFinalBrendan:
 	.string "REFEREE: LADIES AND GENTLEMEN!\n"
 	.string "Welcome to the EVER GRANDE GRAND FINALS!\p"
+	.string "Full 6-on-6 Championship Battle!\p"
 	.string "In the red corner: {PLAYER}!\n"
 	.string "In the blue corner: BRENDAN!\p"
 	.string "Two rivals clashing for the crown of HOENN!\n"
@@ -289,7 +292,7 @@ BattleColosseum_2P_Text_BrendanFinalIntro:
 	.string "BRENDAN: {PLAYER}!\n"
 	.string "Ever since Route 103, we've pushed\l"
 	.string "each other every step of the journey!\p"
-	.string "My team is at its absolute peak!\n"
+	.string "My 6-POKéMON team is at its peak!\n"
 	.string "Let's see who truly is the strongest!$"
 
 BattleColosseum_2P_Text_BrendanFinalDefeat:
@@ -299,6 +302,7 @@ BattleColosseum_2P_Text_BrendanFinalDefeat:
 BattleColosseum_2P_Text_AnnounceFinalMay:
 	.string "REFEREE: LADIES AND GENTLEMEN!\n"
 	.string "Welcome to the EVER GRANDE GRAND FINALS!\p"
+	.string "Full 6-on-6 Championship Battle!\p"
 	.string "In the red corner: {PLAYER}!\n"
 	.string "In the blue corner: MAY!\p"
 	.string "Two rivals clashing for the crown of HOENN!\n"
@@ -308,7 +312,7 @@ BattleColosseum_2P_Text_MayFinalIntro:
 	.string "MAY: {PLAYER}!\n"
 	.string "From our first battle to this grand stage,\l"
 	.string "I've been preparing for this exact moment!\p"
-	.string "I'm giving everything I've got!\n"
+	.string "My 6-POKéMON team is ready!\n"
 	.string "Let's make this the battle of a lifetime!$"
 
 BattleColosseum_2P_Text_MayFinalDefeat:

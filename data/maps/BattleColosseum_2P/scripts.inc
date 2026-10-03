@@ -26,7 +26,9 @@ BattleColosseum_2P_EventScript_SetupOpponentGfx::
 	case 1, BattleColosseum_2P_EventScript_SetGfxRound2
 	case 2, BattleColosseum_2P_EventScript_SetGfxRound3
 	case 3, BattleColosseum_2P_EventScript_SetGfxRound4
-	case 4, BattleColosseum_2P_EventScript_SetGfxRival
+	case 4, BattleColosseum_2P_EventScript_SetGfxRound5
+	case 5, BattleColosseum_2P_EventScript_SetGfxRound6
+	case 6, BattleColosseum_2P_EventScript_SetGfxRival
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_3
 	return
 
@@ -39,10 +41,18 @@ BattleColosseum_2P_EventScript_SetGfxRound2::
 	return
 
 BattleColosseum_2P_EventScript_SetGfxRound3::
-	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_4
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_HEX_MANIAC
 	return
 
 BattleColosseum_2P_EventScript_SetGfxRound4::
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_5
+	return
+
+BattleColosseum_2P_EventScript_SetGfxRound5::
+	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_4
+	return
+
+BattleColosseum_2P_EventScript_SetGfxRound6::
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_GENTLEMAN
 	return
 
@@ -72,7 +82,9 @@ BattleColosseum_2P_EventScript_MatchIntro::
 	case 1, BattleColosseum_2P_EventScript_StartRound2
 	case 2, BattleColosseum_2P_EventScript_StartRound3
 	case 3, BattleColosseum_2P_EventScript_StartRound4
-	case 4, BattleColosseum_2P_EventScript_StartFinalRival
+	case 4, BattleColosseum_2P_EventScript_StartRound5
+	case 5, BattleColosseum_2P_EventScript_StartRound6
+	case 6, BattleColosseum_2P_EventScript_StartFinalRival
 	msgbox BattleColosseum_2P_Text_TournamentAlreadyWon, MSGBOX_DEFAULT
 	releaseall
 	end
@@ -121,6 +133,28 @@ BattleColosseum_2P_EventScript_StartRound4::
 	goto BattleColosseum_2P_EventScript_MatchWon
 	end
 
+BattleColosseum_2P_EventScript_StartRound5::
+	playse SE_M_ENCORE2
+	msgbox BattleColosseum_2P_Text_AnnounceRound5, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ARENA_OPPONENT, Common_Movement_WalkInPlaceLeft
+	waitmovement 0
+	msgbox BattleColosseum_2P_Text_Round5Intro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_EVER_GRANDE_ROUND_5, BattleColosseum_2P_Text_Round5Defeat
+	goto BattleColosseum_2P_EventScript_MatchWon
+	end
+
+BattleColosseum_2P_EventScript_StartRound6::
+	playse SE_M_ENCORE2
+	msgbox BattleColosseum_2P_Text_AnnounceRound6, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_ARENA_OPPONENT, Common_Movement_WalkInPlaceLeft
+	waitmovement 0
+	msgbox BattleColosseum_2P_Text_Round6Intro, MSGBOX_DEFAULT
+	trainerbattle_no_intro TRAINER_EVER_GRANDE_ROUND_6, BattleColosseum_2P_Text_Round6Defeat
+	goto BattleColosseum_2P_EventScript_MatchWon
+	end
+
 BattleColosseum_2P_EventScript_StartFinalRival::
 	playse SE_M_ENCORE2
 	checkplayergender
@@ -148,7 +182,7 @@ BattleColosseum_2P_EventScript_MatchWon::
 	playse SE_M_ENCORE2
 	special HealPlayerParty
 	addvar VAR_EVER_GRANDE_TOURNAMENT_STAGE, 1
-	goto_if_ge VAR_EVER_GRANDE_TOURNAMENT_STAGE, 5, BattleColosseum_2P_EventScript_TournamentChampionWon
+	goto_if_ge VAR_EVER_GRANDE_TOURNAMENT_STAGE, 7, BattleColosseum_2P_EventScript_TournamentChampionWon
 	msgbox BattleColosseum_2P_Text_AdvanceToNextRound, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, BattleColosseum_2P_EventScript_ProceedNextRound
 	msgbox BattleColosseum_2P_Text_TakeRestInLobby, MSGBOX_DEFAULT
@@ -253,30 +287,56 @@ BattleColosseum_2P_Text_Round2Defeat:
 	.string "Magnificent! A true master in the making!$"
 
 BattleColosseum_2P_Text_AnnounceRound3:
+	.string "REFEREE: GROUP STAGE: MATCH 3!\p"
+	.string "3-on-3 Single Battle!\n"
+	.string "{PLAYER} versus HEX MANIAC VALERIE!\p"
+	.string "Winner advances to the KNOCKOUT ROUNDS!$"
+
+BattleColosseum_2P_Text_Round3Intro:
+	.string "VALERIE: Fufufu... Can your light pierce\n"
+	.string "through my shadowy realm? Let's see!$"
+
+BattleColosseum_2P_Text_Round3Defeat:
+	.string "Such blinding brilliance... You advance!$"
+
+BattleColosseum_2P_Text_AnnounceRound4:
 	.string "REFEREE: The Group Stage has concluded!\p"
+	.string "Welcome to the KNOCKOUT ROUND OF 16!\n"
+	.string "Full 6-on-6 Single Battle!\p"
+	.string "{PLAYER} versus COOLTRAINER CLARK!$"
+
+BattleColosseum_2P_Text_Round4Intro:
+	.string "CLARK: Congratulations on passing the\n"
+	.string "group stage, but your streak ends here!$"
+
+BattleColosseum_2P_Text_Round4Defeat:
+	.string "Total domination... Go on to the quarters!$"
+
+BattleColosseum_2P_Text_AnnounceRound5:
+	.string "REFEREE: The stakes are rising!\p"
 	.string "Welcome to the KNOCKOUT QUARTER-FINALS!\n"
 	.string "Full 6-on-6 Single Battle!\p"
 	.string "{PLAYER} versus DRAGON TAMER RYUTO!$"
 
-BattleColosseum_2P_Text_Round3Intro:
+BattleColosseum_2P_Text_Round5Intro:
 	.string "RYUTO: Feel the overwhelming might of\n"
 	.string "my ferocious dragons and steel titans!$"
 
-BattleColosseum_2P_Text_Round3Defeat:
+BattleColosseum_2P_Text_Round5Defeat:
 	.string "My dragons were outmatched! Fantastic!$"
 
-BattleColosseum_2P_Text_AnnounceRound4:
+BattleColosseum_2P_Text_AnnounceRound6:
 	.string "REFEREE: The tension is electrifying!\p"
 	.string "This is the KNOCKOUT SEMI-FINALS!\n"
 	.string "Full 6-on-6 Single Battle!\p"
 	.string "{PLAYER} versus VETERAN JON!\p"
 	.string "Winner advances to the GRAND FINALS!$"
 
-BattleColosseum_2P_Text_Round4Intro:
+BattleColosseum_2P_Text_Round6Intro:
 	.string "JON: Only one of us can face the\n"
 	.string "Finalist! I won't hold anything back!$"
 
-BattleColosseum_2P_Text_Round4Defeat:
+BattleColosseum_2P_Text_Round6Defeat:
 	.string "You are unstoppable! Go on and win it all!$"
 
 BattleColosseum_2P_Text_AnnounceFinalBrendan:

@@ -3056,6 +3056,8 @@ static bool32 IsEverGrandeTournamentTrainer(u16 trainerNum)
          || trainerNum == TRAINER_EVER_GRANDE_ROUND_2
          || trainerNum == TRAINER_EVER_GRANDE_ROUND_3
          || trainerNum == TRAINER_EVER_GRANDE_ROUND_4
+         || trainerNum == TRAINER_EVER_GRANDE_ROUND_5
+         || trainerNum == TRAINER_EVER_GRANDE_ROUND_6
          || trainerNum == TRAINER_EVER_GRANDE_FINAL_BRENDAN
          || trainerNum == TRAINER_EVER_GRANDE_FINAL_MAY);
 }
@@ -3073,38 +3075,55 @@ static void SetupEverGrandeTournamentParty(struct Pokemon *party, u16 trainerNum
     if (trainerNum == TRAINER_EVER_GRANDE_ROUND_1)
     {
         partySize = 3;
-        speciesList[0] = SPECIES_SWELLOW;   levels[0] = 64; items[0] = ITEM_SILK_SCARF;
-        speciesList[1] = SPECIES_AGGRON;    levels[1] = 65; items[1] = ITEM_HARD_STONE;
-        speciesList[2] = SPECIES_BRELOOM;   levels[2] = 65; items[2] = ITEM_SITRUS_BERRY;
+        speciesList[0] = SPECIES_SWELLOW;   levels[0] = 53; items[0] = ITEM_SILK_SCARF;
+        speciesList[1] = SPECIES_AGGRON;    levels[1] = 54; items[1] = ITEM_HARD_STONE;
+        speciesList[2] = SPECIES_BRELOOM;   levels[2] = 54; items[2] = ITEM_SITRUS_BERRY;
     }
     else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_2)
     {
         partySize = 3;
-        speciesList[0] = SPECIES_DUGTRIO;   levels[0] = 66; items[0] = ITEM_SOFT_SAND;
-        speciesList[1] = SPECIES_GOLDUCK;   levels[1] = 66; items[1] = ITEM_MYSTIC_WATER;
-        speciesList[2] = SPECIES_SCIZOR;    levels[2] = 67; items[2] = ITEM_SITRUS_BERRY;
+        speciesList[0] = SPECIES_DUGTRIO;   levels[0] = 56; items[0] = ITEM_SOFT_SAND;
+        speciesList[1] = SPECIES_GOLDUCK;   levels[1] = 56; items[1] = ITEM_MYSTIC_WATER;
+        speciesList[2] = SPECIES_SCIZOR;    levels[2] = 57; items[2] = ITEM_SITRUS_BERRY;
     }
     else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_3)
     {
-        partySize = 6;
-        speciesList[0] = SPECIES_GIRAFARIG; levels[0] = 68; items[0] = ITEM_TWISTED_SPOON;
-        speciesList[1] = SPECIES_DUNSPARCE; levels[1] = 68; items[1] = ITEM_LEFTOVERS;
-        speciesList[2] = SPECIES_GLIGAR;    levels[2] = 68; items[2] = ITEM_POISON_BARB;
-        speciesList[3] = SPECIES_STEELIX;   levels[3] = 69; items[3] = ITEM_METAL_COAT;
-        speciesList[4] = SPECIES_FLYGON;    levels[4] = 69; items[4] = ITEM_SOFT_SAND;
-        speciesList[5] = SPECIES_METAGROSS; levels[5] = 70; items[5] = ITEM_SITRUS_BERRY;
+        partySize = 3;
+        speciesList[0] = SPECIES_GENGAR;    levels[0] = 58; items[0] = ITEM_SPELL_TAG;
+        speciesList[1] = SPECIES_CHANDELURE;levels[1] = 59; items[1] = ITEM_CHARCOAL;
+        speciesList[2] = SPECIES_MISMAGIUS; levels[2] = 60; items[2] = ITEM_SITRUS_BERRY;
     }
-    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_4)
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_4) // Round of 16
     {
         partySize = 6;
-        speciesList[0] = SPECIES_ALTARIA;   levels[0] = 70; items[0] = ITEM_DRAGON_FANG;
-        speciesList[1] = SPECIES_EXEGGUTOR; levels[1] = 71; items[1] = ITEM_MIRACLE_SEED;
-        speciesList[2] = SPECIES_CHARIZARD; levels[2] = 71; items[2] = ITEM_CHARCOAL;
-        speciesList[3] = SPECIES_KINGDRA;   levels[3] = 72; items[3] = ITEM_LUM_BERRY;
-        speciesList[4] = SPECIES_LUCARIO;   levels[4] = 72; items[4] = ITEM_EXPERT_BELT;
-        speciesList[5] = SPECIES_SALAMENCE; levels[5] = 73; items[5] = ITEM_SITRUS_BERRY;
+        speciesList[0] = SPECIES_STARAPTOR; levels[0] = 62; items[0] = ITEM_SILK_SCARF;
+        speciesList[1] = SPECIES_HOUNDOOM;  levels[1] = 63; items[1] = ITEM_CHARCOAL;
+        speciesList[2] = SPECIES_ELECTIVIRE;levels[2] = 63; items[2] = ITEM_MAGNET;
+        speciesList[3] = SPECIES_MAGMORTAR; levels[3] = 64; items[3] = ITEM_EXPERT_BELT;
+        speciesList[4] = SPECIES_SNORLAX;   levels[4] = 64; items[4] = ITEM_LEFTOVERS;
+        speciesList[5] = SPECIES_DRAGONITE; levels[5] = 65; items[5] = ITEM_SITRUS_BERRY;
     }
-    else // Final Match vs Rival
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_5) // Quarter-Finals
+    {
+        partySize = 6;
+        speciesList[0] = SPECIES_GIRAFARIG; levels[0] = 66; items[0] = ITEM_TWISTED_SPOON;
+        speciesList[1] = SPECIES_DUNSPARCE; levels[1] = 66; items[1] = ITEM_LEFTOVERS;
+        speciesList[2] = SPECIES_GLIGAR;    levels[2] = 67; items[2] = ITEM_POISON_BARB;
+        speciesList[3] = SPECIES_STEELIX;   levels[3] = 68; items[3] = ITEM_METAL_COAT;
+        speciesList[4] = SPECIES_FLYGON;    levels[4] = 68; items[4] = ITEM_SOFT_SAND;
+        speciesList[5] = SPECIES_METAGROSS; levels[5] = 69; items[5] = ITEM_SITRUS_BERRY;
+    }
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_6) // Semi-Finals
+    {
+        partySize = 6;
+        speciesList[0] = SPECIES_ALTARIA;   levels[0] = 71; items[0] = ITEM_DRAGON_FANG;
+        speciesList[1] = SPECIES_EXEGGUTOR; levels[1] = 72; items[1] = ITEM_MIRACLE_SEED;
+        speciesList[2] = SPECIES_CHARIZARD; levels[2] = 72; items[2] = ITEM_CHARCOAL;
+        speciesList[3] = SPECIES_KINGDRA;   levels[3] = 73; items[3] = ITEM_LUM_BERRY;
+        speciesList[4] = SPECIES_LUCARIO;   levels[4] = 74; items[4] = ITEM_EXPERT_BELT;
+        speciesList[5] = SPECIES_SALAMENCE; levels[5] = 74; items[5] = ITEM_SITRUS_BERRY;
+    }
+    else // Grand Finals vs Rival
     {
         enum Species playerSpecies = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES);
         enum Species counterBase;

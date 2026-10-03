@@ -4598,7 +4598,7 @@ AI: Basic Trainer / Force Setup First Turn
 Mugshot: Purple
 
 Mightyena
-Level: 64
+Level: 70
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Roar
 - Double Edge
@@ -4606,7 +4606,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Crunch
 
 Shiftry
-Level: 65
+Level: 71
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Leaf Blade
 - Extrasensory
@@ -4614,7 +4614,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Swagger
 
 Cacturne
-Level: 65
+Level: 72
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Spiky Shield
 - Needle Arm
@@ -4622,7 +4622,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Poison Jab
 
 Crawdaunt
-Level: 66
+Level: 73
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Crabhammer
 - Crunch
@@ -4630,7 +4630,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Aqua Jet
 
 Houndoom
-Level: 66
+Level: 73
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Flamethrower
 - Dark Pulse
@@ -4638,7 +4638,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Sludge Bomb
 
 Absol @ Sitrus Berry
-Level: 68
+Level: 76
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Night Slash
 - Swords Dance
@@ -4657,7 +4657,7 @@ AI: Basic Trainer
 Mugshot: Green
 
 Dusclops
-Level: 67
+Level: 71
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Punch
 - Confuse Ray
@@ -4665,7 +4665,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Protect
 
 Banette
-Level: 68
+Level: 72
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Sneak
 - Gunk Shot
@@ -4673,7 +4673,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Sucker Punch
 
 Sableye
-Level: 68
+Level: 73
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Sneak
 - Recover
@@ -4681,7 +4681,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Toxic
 
 Mismagius
-Level: 69
+Level: 74
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Ball
 - Mystical Fire
@@ -4689,7 +4689,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Dazzling Gleam
 
 Gengar
-Level: 70
+Level: 75
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Ball
 - Sludge Bomb
@@ -4697,7 +4697,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Focus Blast
 
 Dusknoir @ Sitrus Berry
-Level: 71
+Level: 77
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Shadow Punch
 - Ice Punch
@@ -4716,7 +4716,7 @@ AI: Basic Trainer
 Mugshot: Pink
 
 Glalie
-Level: 71
+Level: 72
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Freeze Dry
 - Crunch
@@ -4724,7 +4724,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Shadow Ball
 
 Froslass
-Level: 72
+Level: 73
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Blizzard
 - Shadow Ball
@@ -4732,7 +4732,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Destiny Bond
 
 Lapras
-Level: 72
+Level: 74
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Surf
 - Ice Beam
@@ -4740,7 +4740,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Sing
 
 Mamoswine
-Level: 73
+Level: 75
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Icicle Crash
 - Earthquake
@@ -4748,7 +4748,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Stone Edge
 
 Weavile
-Level: 74
+Level: 75
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Ice Spinner
 - Night Slash
@@ -4756,7 +4756,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Swords Dance
 
 Walrein @ Sitrus Berry
-Level: 75
+Level: 78
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Surf
 - Body Slam
@@ -4799,7 +4799,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Flash Cannon
 
 Flygon
-Level: 76
+Level: 77
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Earthquake
 - Dragon Claw
@@ -4807,7 +4807,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Crunch
 
 Haxorus
-Level: 77
+Level: 78
 IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Dragon Dance
 - Outrage
@@ -4815,7 +4815,7 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Close Combat
 
 Salamence @ Sitrus Berry
-Level: 78
+Level: 80
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Flamethrower
 - Dragon Claw
@@ -16920,7 +16920,7 @@ Double Battle: No
 AI: Basic Trainer
 
 Swellow
-Level: 64
+Level: 53
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 === TRAINER_EVER_GRANDE_ROUND_2 ===
@@ -16933,10 +16933,36 @@ Double Battle: No
 AI: Basic Trainer
 
 Scizor
-Level: 67
+Level: 57
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 === TRAINER_EVER_GRANDE_ROUND_3 ===
+Name: VALERIE
+Class: Hex Maniac
+Pic: Hex Maniac
+Gender: Female
+Music: Female
+Double Battle: No
+AI: Basic Trainer
+
+Mismagius
+Level: 60
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+
+=== TRAINER_EVER_GRANDE_ROUND_4 ===
+Name: CLARK
+Class: Cooltrainer
+Pic: Cooltrainer M
+Gender: Male
+Music: Cool
+Double Battle: No
+AI: Basic Trainer
+
+Dragonite
+Level: 65
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+
+=== TRAINER_EVER_GRANDE_ROUND_5 ===
 Name: RYUTO
 Class: Dragon Tamer
 Pic: Dragon Tamer
@@ -16949,7 +16975,7 @@ Metagross
 Level: 69
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
-=== TRAINER_EVER_GRANDE_ROUND_4 ===
+=== TRAINER_EVER_GRANDE_ROUND_6 ===
 Name: JON
 Class: Cooltrainer
 Pic: Cooltrainer M
@@ -16959,7 +16985,7 @@ Double Battle: No
 AI: Basic Trainer
 
 Salamence
-Level: 72
+Level: 74
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 
 === TRAINER_EVER_GRANDE_FINAL_BRENDAN ===

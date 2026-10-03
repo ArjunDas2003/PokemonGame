@@ -227,18 +227,18 @@ BattleColosseum_2P_EventScript_Opponent::
 	release
 	end
 
-BattleColosseum_2P_EventScript_Attendant::
+BattleColosseum_2P_EventScript_TournamentAttendant::
 	lock
 	faceplayer
 	special HealPlayerParty
 	playse SE_USE_ITEM
 	msgbox BattleColosseum_2P_Text_AttendantHealed, MSGBOX_DEFAULT
 	msgbox BattleColosseum_2P_Text_AttendantAskLeave, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, BattleColosseum_2P_EventScript_AttendantWarpOut
+	goto_if_eq VAR_RESULT, YES, BattleColosseum_2P_EventScript_TournamentAttendantWarpOut
 	release
 	end
 
-BattleColosseum_2P_EventScript_AttendantWarpOut::
+BattleColosseum_2P_EventScript_TournamentAttendantWarpOut::
 	msgbox BattleColosseum_2P_Text_ReturningToLobby, MSGBOX_DEFAULT
 	closemessage
 	warp MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_1F, 9, 5

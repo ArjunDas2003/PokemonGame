@@ -6,7 +6,7 @@ EverGrandeCity_PokemonLeague_1F_MapScripts::
 EverGrandeCity_PokemonLeague_1F_OnTransition:
 	setrespawn HEAL_LOCATION_EVER_GRANDE_CITY_POKEMON_LEAGUE
 	setflag FLAG_LANDMARK_POKEMON_LEAGUE
-	call_if_unset FLAG_ENTERED_ELITE_FOUR, EverGrandeCity_PokemonLeague_1F_EventScript_GuardsBlockDoor
+	call_if_unset FLAG_EVER_GRANDE_TOURNAMENT_WON, EverGrandeCity_PokemonLeague_1F_EventScript_GuardsBlockDoor
 	end
 
 EverGrandeCity_PokemonLeague_1F_EventScript_GuardsBlockDoor::
@@ -43,31 +43,29 @@ EverGrandeCity_PokemonLeague_1F_Pokemart:
 	.2byte ITEM_MAX_REPEL
 	pokemartlistend
 
-@ The door guards only check for FLAG_BADGE06_GET because Winonas badge is the only one that can be skipped
-@ Its assumed the player has the remaining badges
 EverGrandeCity_PokemonLeague_1F_EventScript_DoorGuard::
 	lockall
-	goto_if_set FLAG_ENTERED_ELITE_FOUR, EverGrandeCity_PokemonLeague_1F_EventScript_GoForth
+	goto_if_set FLAG_EVER_GRANDE_TOURNAMENT_WON, EverGrandeCity_PokemonLeague_1F_EventScript_GoForth
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
 	call_if_ge VAR_TEMP_0, 11, EverGrandeCity_PokemonLeague_1F_EventScript_PlayerMoveToFrontFromRight
 	call_if_le VAR_TEMP_0, 8, EverGrandeCity_PokemonLeague_1F_EventScript_PlayerMoveToFrontFromLeft
 	message EverGrandeCity_PokemonLeague_1F_Text_MustHaveAllGymBadges
 	waitmessage
-	delay 120
+	delay 80
 	goto_if_unset FLAG_BADGE06_GET, EverGrandeCity_PokemonLeague_1F_EventScript_NotAllBadges
 	closemessage
-	applymovement LOCALID_LEAGUE_GUARD_1, EverGrandeCity_PokemonLeague_1F_Movement_LeftGuardOutOfWay
-	applymovement LOCALID_LEAGUE_GUARD_2, EverGrandeCity_PokemonLeague_1F_Movement_RightGuardOutOfWay
-	waitmovement 0
-	delay 10
-	playfanfare MUS_OBTAIN_BADGE
-	message EverGrandeCity_PokemonLeague_1F_Text_GoForth
-	waitmessage
-	waitfanfare
+	msgbox EverGrandeCity_PokemonLeague_1F_Text_MustWinTournamentFirst, MSGBOX_DEFAULT
+	msgbox EverGrandeCity_PokemonLeague_1F_Text_EnterTournamentArena, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, YES, EverGrandeCity_PokemonLeague_1F_EventScript_WarpToTournament
+	msgbox EverGrandeCity_PokemonLeague_1F_Text_ComeBackWhenReady, MSGBOX_DEFAULT
+	releaseall
+	end
+
+EverGrandeCity_PokemonLeague_1F_EventScript_WarpToTournament::
+	msgbox EverGrandeCity_PokemonLeague_1F_Text_GuideToArena, MSGBOX_DEFAULT
 	closemessage
-	copyobjectxytoperm LOCALID_LEAGUE_GUARD_1
-	copyobjectxytoperm LOCALID_LEAGUE_GUARD_2
-	setflag FLAG_ENTERED_ELITE_FOUR
+	warp MAP_BATTLE_COLOSSEUM_2P, 6, 7
+	waitstate
 	releaseall
 	end
 
@@ -90,7 +88,7 @@ EverGrandeCity_PokemonLeague_1F_EventScript_NotAllBadges::
 EverGrandeCity_PokemonLeague_1F_EventScript_GoForth::
 	applymovement VAR_LAST_TALKED, Common_Movement_FacePlayer
 	waitmovement 0
-	msgbox EverGrandeCity_PokemonLeague_1F_Text_GoForth, MSGBOX_DEFAULT
+	msgbox EverGrandeCity_PokemonLeague_1F_Text_ChampionGoForth, MSGBOX_DEFAULT
 	closemessage
 	applymovement VAR_LAST_TALKED, Common_Movement_FaceOriginalDirection
 	waitmovement 0
@@ -124,14 +122,37 @@ EverGrandeCity_PokemonLeague_1F_Text_MustHaveAllGymBadges:
 	.string "who have collected all the GYM BADGES\l"
 	.string "are permitted to enter.\p"
 	.string "TRAINER, let us confirm that you have\n"
-	.string "all the GYM BADGES.$"
+	.string "all 8 GYM BADGES...$"
 
 EverGrandeCity_PokemonLeague_1F_Text_HaventObtainedAllBadges:
-	.string "You haven't obtained all the BADGES.\p"
-	.string "If you're bound for the POKéMON\n"
-	.string "LEAGUE, you must return with them.$"
+	.string "You haven't obtained all 8 BADGES.\p"
+	.string "If you're bound for the EVER GRANDE\n"
+	.string "CONFERENCE, you must return with them.$"
 
-EverGrandeCity_PokemonLeague_1F_Text_GoForth:
-	.string "TRAINER! Believe in yourself and your\n"
-	.string "POKéMON, and go forth!$"
+EverGrandeCity_PokemonLeague_1F_Text_MustWinTournamentFirst:
+	.string "All 8 BADGES verified!\p"
+	.string "Welcome, TRAINER, to the prestigious\n"
+	.string "EVER GRANDE CONFERENCE!\p"
+	.string "Before you may challenge the ELITE FOUR\n"
+	.string "and CHAMPION WALLACE, you must prove\l"
+	.string "your mastery by conquering the\l"
+	.string "EVER GRANDE CONFERENCE TOURNAMENT!$"
 
+EverGrandeCity_PokemonLeague_1F_Text_EnterTournamentArena:
+	.string "Would you like to enter the\n"
+	.string "TOURNAMENT ARENA now?$"
+
+EverGrandeCity_PokemonLeague_1F_Text_ComeBackWhenReady:
+	.string "Understood. Prepare your team and speak\n"
+	.string "with us when you are ready to battle!$"
+
+EverGrandeCity_PokemonLeague_1F_Text_GuideToArena:
+	.string "Right this way to the TOURNAMENT ARENA!\n"
+	.string "Best of luck, TRAINER!$"
+
+EverGrandeCity_PokemonLeague_1F_Text_ChampionGoForth:
+	.string "Welcome, EVER GRANDE CHAMPION {PLAYER}!\p"
+	.string "The gates to the POKéMON LEAGUE are\n"
+	.string "open for you!\p"
+	.string "Believe in yourself and your POKéMON,\n"
+	.string "and go forth to face the ELITE FOUR!$"

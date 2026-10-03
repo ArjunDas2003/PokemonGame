@@ -101,6 +101,8 @@ static void DoTrainerBattle(void);
 static u8 GetPlayerBadgeCount(void);
 static bool32 IsGymLeaderTrainer(u16 trainerNum, u8 *gymIndexOut);
 static void SetupGymLeaderBattleParty(struct Pokemon *party, u16 trainerNum);
+static bool32 IsEverGrandeTournamentTrainer(u16 trainerNum);
+static void SetupEverGrandeTournamentParty(struct Pokemon *party, u16 trainerNum);
 
 EWRAM_DATA TrainerBattleParameter gTrainerBattleParameter = {0};
 EWRAM_DATA u16 gPartnerTrainerId = 0;
@@ -3028,6 +3030,126 @@ static void SetupRivalInitialBattleParty(struct Pokemon *party, u16 trainerNum)
     CalculateMonStats(&party[0]);
 }
 
+static enum Species GetFinalEvolutionSpecies(enum Species species)
+{
+    const struct Evolution *evos;
+    enum Species curr = species;
+    u32 safety = 0;
+
+    if (species == SPECIES_NONE || species >= NUM_SPECIES)
+        return SPECIES_SCEPTILE;
+
+    while (safety < 10)
+    {
+        evos = GetSpeciesEvolutions(curr);
+        if (evos == NULL || evos[0].method == EVOLUTIONS_END || evos[0].targetSpecies == SPECIES_NONE || evos[0].targetSpecies >= NUM_SPECIES)
+            break;
+        curr = evos[0].targetSpecies;
+        safety++;
+    }
+    return curr;
+}
+
+static bool32 IsEverGrandeTournamentTrainer(u16 trainerNum)
+{
+    return (trainerNum == TRAINER_EVER_GRANDE_ROUND_1
+         || trainerNum == TRAINER_EVER_GRANDE_ROUND_2
+         || trainerNum == TRAINER_EVER_GRANDE_ROUND_3
+         || trainerNum == TRAINER_EVER_GRANDE_ROUND_4
+         || trainerNum == TRAINER_EVER_GRANDE_FINAL_BRENDAN
+         || trainerNum == TRAINER_EVER_GRANDE_FINAL_MAY);
+}
+
+static void SetupEverGrandeTournamentParty(struct Pokemon *party, u16 trainerNum)
+{
+    u32 i;
+    u8 partySize = 6;
+    enum Species speciesList[6];
+    u8 levels[6];
+    enum Item items[6];
+
+    ZeroPartyMons(party);
+
+    if (trainerNum == TRAINER_EVER_GRANDE_ROUND_1)
+    {
+        partySize = 4;
+        speciesList[0] = SPECIES_SWELLOW;   levels[0] = 64; items[0] = ITEM_SILK_SCARF;
+        speciesList[1] = SPECIES_AGGRON;    levels[1] = 64; items[1] = ITEM_HARD_STONE;
+        speciesList[2] = SPECIES_MANECTRIC; levels[2] = 65; items[2] = ITEM_MAGNET;
+        speciesList[3] = SPECIES_BRELOOM;   levels[3] = 65; items[3] = ITEM_SITRUS_BERRY;
+    }
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_2)
+    {
+        partySize = 5;
+        speciesList[0] = SPECIES_VENOMOTH;  levels[0] = 66; items[0] = ITEM_FOCUS_SASH;
+        speciesList[1] = SPECIES_DUGTRIO;   levels[1] = 66; items[1] = ITEM_SOFT_SAND;
+        speciesList[2] = SPECIES_GOLDUCK;   levels[2] = 66; items[2] = ITEM_MYSTIC_WATER;
+        speciesList[3] = SPECIES_MISDREAVUS; levels[3] = 67; items[3] = ITEM_SPELL_TAG;
+        speciesList[4] = SPECIES_SCIZOR;    levels[4] = 67; items[4] = ITEM_SITRUS_BERRY;
+    }
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_3)
+    {
+        partySize = 5;
+        speciesList[0] = SPECIES_GIRAFARIG; levels[0] = 68; items[0] = ITEM_TWISTED_SPOON;
+        speciesList[1] = SPECIES_DUNSPARCE; levels[1] = 68; items[1] = ITEM_LEFTOVERS;
+        speciesList[2] = SPECIES_GLIGAR;    levels[2] = 68; items[2] = ITEM_POISON_BARB;
+        speciesList[3] = SPECIES_STEELIX;   levels[3] = 69; items[3] = ITEM_METAL_COAT;
+        speciesList[4] = SPECIES_METAGROSS; levels[4] = 69; items[4] = ITEM_SITRUS_BERRY;
+    }
+    else if (trainerNum == TRAINER_EVER_GRANDE_ROUND_4)
+    {
+        partySize = 6;
+        speciesList[0] = SPECIES_ALTARIA;   levels[0] = 70; items[0] = ITEM_DRAGON_FANG;
+        speciesList[1] = SPECIES_FLYGON;    levels[1] = 70; items[1] = ITEM_SOFT_SAND;
+        speciesList[2] = SPECIES_EXEGGUTOR; levels[2] = 71; items[2] = ITEM_MIRACLE_SEED;
+        speciesList[3] = SPECIES_CHARIZARD; levels[3] = 71; items[3] = ITEM_CHARCOAL;
+        speciesList[4] = SPECIES_KINGDRA;   levels[4] = 72; items[4] = ITEM_LUM_BERRY;
+        speciesList[5] = SPECIES_SALAMENCE; levels[5] = 72; items[5] = ITEM_SITRUS_BERRY;
+    }
+    else // Final Match vs Rival
+    {
+        enum Species playerSpecies = GetMonData(&gParties[B_TRAINER_PLAYER][0], MON_DATA_SPECIES);
+        enum Species counterBase;
+        enum Species rivalAce;
+
+        if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
+            playerSpecies = GetStarterPokemon(VarGet(VAR_STARTER_MON));
+
+        counterBase = GetRivalCounterSpecies(playerSpecies);
+        rivalAce = GetFinalEvolutionSpecies(counterBase);
+
+        partySize = 6;
+        speciesList[0] = SPECIES_GENGAR;    levels[0] = 76; items[0] = ITEM_FOCUS_SASH;
+        speciesList[1] = SPECIES_METAGROSS; levels[1] = 77; items[1] = ITEM_ASSAULT_VEST;
+        speciesList[2] = SPECIES_GARCHOMP;  levels[2] = 77; items[2] = ITEM_LIFE_ORB;
+        speciesList[3] = SPECIES_TOGEKISS;  levels[3] = 78; items[3] = ITEM_LEFTOVERS;
+        speciesList[4] = SPECIES_LUCARIO;   levels[4] = 78; items[4] = ITEM_EXPERT_BELT;
+        speciesList[5] = rivalAce;          levels[5] = 80; items[5] = ITEM_SITRUS_BERRY;
+    }
+
+    for (i = 0; i < partySize; i++)
+    {
+        u8 blockDynamax = BLOCK_AI_DYNAMAX;
+        bool8 noGmax = FALSE;
+        u8 noTera = TYPE_MYSTERY;
+        u8 iv = 31;
+
+        CreateMon(&party[i], speciesList[i], levels[i], Random32(), OTID_STRUCT_RANDOM_NO_SHINY);
+        SetMonData(&party[i], MON_DATA_DYNAMAX_LEVEL, &blockDynamax);
+        SetMonData(&party[i], MON_DATA_GIGANTAMAX_FACTOR, &noGmax);
+        SetMonData(&party[i], MON_DATA_TERA_TYPE, &noTera);
+        SetMonData(&party[i], MON_DATA_HELD_ITEM, &items[i]);
+        GiveMonInitialMoveset(&party[i]);
+        SetMonData(&party[i], MON_DATA_HP_IV, &iv);
+        SetMonData(&party[i], MON_DATA_ATK_IV, &iv);
+        SetMonData(&party[i], MON_DATA_DEF_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPEED_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPATK_IV, &iv);
+        SetMonData(&party[i], MON_DATA_SPDEF_IV, &iv);
+        CalculateMonStats(&party[i]);
+    }
+}
+
 static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
 {
     if (IsRivalInitialBattle(trainerNum))
@@ -3039,6 +3161,12 @@ static void CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum)
     if (IsGymLeaderTrainer(trainerNum, NULL))
     {
         SetupGymLeaderBattleParty(party, trainerNum);
+        return;
+    }
+
+    if (IsEverGrandeTournamentTrainer(trainerNum))
+    {
+        SetupEverGrandeTournamentParty(party, trainerNum);
         return;
     }
 

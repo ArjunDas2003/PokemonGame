@@ -1,7 +1,3 @@
-.set LOCALID_ARENA_MC, 1
-.set LOCALID_ARENA_OPPONENT, 2
-.set LOCALID_ARENA_ATTENDANT, 3
-
 BattleColosseum_2P_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, BattleColosseum_2P_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, BattleColosseum_2P_OnFrame

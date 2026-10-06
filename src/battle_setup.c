@@ -2359,7 +2359,7 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
     u32 i;
     u32 bestScore = 0;
     u32 poolCount = GetThreeStageStarterPoolCount();
-    enum Species bestCandidates[poolCount];
+    enum Species bestCandidates[80];
     u32 numBest = 0;
 
     if (playerSpecies == SPECIES_NONE || playerSpecies >= NUM_SPECIES)
@@ -2367,6 +2367,9 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
 
     pType1 = gSpeciesInfo[playerSpecies].types[0];
     pType2 = gSpeciesInfo[playerSpecies].types[1];
+
+    if (poolCount > ARRAY_COUNT(bestCandidates))
+        poolCount = ARRAY_COUNT(bestCandidates);
 
     for (i = 0; i < poolCount; i++)
     {
@@ -2436,7 +2439,7 @@ static enum Species GetRivalCounterSpecies(enum Species playerSpecies)
             numBest = 0;
             bestCandidates[numBest++] = candidate;
         }
-        else if (score == bestScore && numBest < poolCount)
+        else if (score == bestScore && numBest < ARRAY_COUNT(bestCandidates))
         {
             bestCandidates[numBest++] = candidate;
         }
@@ -2847,6 +2850,7 @@ static u8 CalculatePlayerTopNAverageLevel(u8 n)
     u8 count = 0;
     u32 i, j;
     u32 sum = 0;
+    u8 considerCount;
 
     for (i = 0; i < PARTY_SIZE; i++)
     {
@@ -2860,20 +2864,20 @@ static u8 CalculatePlayerTopNAverageLevel(u8 n)
     if (count == 0)
         return 15;
 
-    for (i = 0; i < count; i++)
+    // Fast descending insertion sort for <= 6 elements
+    for (i = 1; i < count; i++)
     {
-        for (j = i + 1; j < count; j++)
+        u8 key = playerLevels[i];
+        j = i;
+        while (j > 0 && playerLevels[j - 1] < key)
         {
-            if (playerLevels[j] > playerLevels[i])
-            {
-                u8 temp = playerLevels[i];
-                playerLevels[i] = playerLevels[j];
-                playerLevels[j] = temp;
-            }
+            playerLevels[j] = playerLevels[j - 1];
+            j--;
         }
+        playerLevels[j] = key;
     }
 
-    u8 considerCount = (count < n) ? count : n;
+    considerCount = (count < n) ? count : n;
     for (i = 0; i < considerCount; i++)
         sum += playerLevels[i];
 
@@ -2947,7 +2951,7 @@ static void SetupGymLeaderBattleParty(struct Pokemon *party, u16 trainerNum)
                 }
             }
             attempts++;
-        } while (duplicate && attempts < 100);
+        } while (duplicate && attempts < 20);
 
         chosenSpecies[i] = picked;
     }

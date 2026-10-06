@@ -596,21 +596,60 @@ Class: Aqua Leader
 Pic: Aqua Leader Archie
 Gender: Male
 Music: Aqua
-Items: Super Potion / Super Potion
+Items: Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer
 
-Mightyena
-Level: 41
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Pelipper @ Damp Rock
+Ability: Drizzle
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Hurricane
+- Hydro Pump
+- Roost
+- U Turn
 
 Crobat
-Level: 41
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Ability: Infiltrator
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Brave Bird
+- Cross Poison
+- U Turn
+- Roost
 
-Sharpedo
-Level: 43
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Tentacruel @ Black Sludge
+Level: 45
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Scald
+- Sludge Wave
+- Ice Beam
+- Dazzling Gleam
+
+Crawdaunt @ Life Orb
+Ability: Adaptability
+Level: 45
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Crabhammer
+- Knock Off
+- Aqua Jet
+- Swords Dance
+
+Mightyena @ Sitrus Berry
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Sucker Punch
+- Play Rough
+- Ice Fang
+- Crunch
+
+Sharpedo @ Sharpedonite
+Level: 47
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Crunch
+- Waterfall
+- Ice Fang
+- Psychic Fangs
 
 === TRAINER_LEAH ===
 Name: LEAH
@@ -4637,12 +4676,12 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Nasty Plot
 - Sludge Bomb
 
-Absol @ Sitrus Berry
+Absol @ Absolite
 Level: 76
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Night Slash
 - Swords Dance
-- Psycho Cut
+- Sucker Punch
 - Play Rough
 
 === TRAINER_PHOEBE ===
@@ -4672,13 +4711,13 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Phantom Force
 - Sucker Punch
 
-Sableye
-Level: 73
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Shadow Sneak
+Sableye @ Sablenite
+Level: 75
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Calm Mind
+- Shadow Ball
+- Dazzling Gleam
 - Recover
-- Foul Play
-- Toxic
 
 Mismagius
 Level: 74
@@ -4715,13 +4754,13 @@ Double Battle: No
 AI: Basic Trainer
 Mugshot: Pink
 
-Glalie
-Level: 72
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
+Glalie @ Glalitite
+Level: 76
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Return
+- Ice Shard
 - Freeze Dry
-- Crunch
-- Ice Beam
-- Shadow Ball
+- Earthquake
 
 Froslass
 Level: 73
@@ -4814,13 +4853,13 @@ IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
 - Poison Jab
 - Close Combat
 
-Salamence @ Sitrus Berry
+Salamence @ Salamencite
 Level: 80
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Flamethrower
+- Dragon Dance
+- Double Edge
 - Dragon Claw
-- Rock Slide
-- Crunch
+- Earthquake
 
 === TRAINER_ROXANNE_1 ===
 Name: ROXANNE
@@ -6317,13 +6356,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Amnesia
 - Hyper Beam
 
-Gyarados
+Gyarados @ Gyaradosite
 Level: 82
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Dragon Dance
+- Waterfall
+- Crunch
 - Earthquake
-- Hyper Beam
-- Surf
 
 Milotic @ Sitrus Berry
 Level: 85
@@ -11041,21 +11080,59 @@ Class: Magma Leader
 Pic: Magma Leader Maxie
 Gender: Male
 Music: Magma
-Items: Super Potion / Super Potion
+Items: Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer
 
-Mightyena
-Level: 37
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Ninetales @ Heat Rock
+Ability: Drought
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Flamethrower
+- Solar Beam
+- Will O Wisp
+- Nasty Plot
 
 Crobat
-Level: 38
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Ability: Infiltrator
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Brave Bird
+- Cross Poison
+- U Turn
+- Roost
 
-Camerupt
-Level: 39
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
+Houndoom @ Life Orb
+Level: 45
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Flamethrower
+- Dark Pulse
+- Sludge Bomb
+- Nasty Plot
+
+Excadrill @ Focus Sash
+Level: 45
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Earthquake
+- Iron Head
+- Rock Slide
+- Swords Dance
+
+Mightyena @ Sitrus Berry
+Level: 44
+IVs: 25 HP / 25 Atk / 25 Def / 25 SpA / 25 SpD / 25 Spe
+- Sucker Punch
+- Play Rough
+- Fire Fang
+- Crunch
+
+Camerupt @ Cameruptite
+Level: 47
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Fire Blast
+- Earth Power
+- Ancient Power
+- Flash Cannon
 
 === TRAINER_MAXIE_MT_CHIMNEY ===
 Name: MAXIE
@@ -12240,45 +12317,57 @@ Items: Full Restore / Full Restore
 Double Battle: No
 AI: Basic Trainer
 
-Altaria
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Aerial Ace
-- Safeguard
-- Dragon Breath
-- Dragon Dance
-
-Delcatty
-Level: 55
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Sing
-- Assist
-- Charm
-- Feint Attack
-
-Roselia
-Level: 56
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Magical Leaf
-- Leech Seed
+Roserade @ Focus Sash
+Level: 72
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Sludge Bomb
 - Giga Drain
-- Toxic
+- Dazzling Gleam
+- Toxic Spikes
 
-Magneton
-Level: 53
-IVs: 18 HP / 18 Atk / 18 Def / 18 SpA / 18 SpD / 18 Spe
-- Supersonic
+Talonflame @ Life Orb
+Ability: Gale Wings
+Level: 73
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Brave Bird
+- Flare Blitz
+- Roost
+- Swords Dance
+
+Magnezone @ Leftovers
+Ability: Sturdy
+Level: 74
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Thunderbolt
-- Tri Attack
-- Screech
+- Flash Cannon
+- Volt Switch
+- Body Press
 
-Gardevoir
-Level: 57
-IVs: 30 HP / 30 Atk / 30 Def / 30 SpA / 30 SpD / 30 Spe
-- Double Team
-- Calm Mind
-- Psychic
-- Future Sight
+Altaria @ Sitrus Berry
+Ability: Natural Cure
+Level: 74
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Dragon Dance
+- Dragon Claw
+- Earthquake
+- Roost
+
+Garchomp @ Choice Scarf
+Ability: Rough Skin
+Level: 75
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Earthquake
+- Outrage
+- Stone Edge
+- Poison Jab
+
+Gallade @ Galladite
+Level: 78
+IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
+- Close Combat
+- Psycho Cut
+- Swords Dance
+- Knock Off
 
 === TRAINER_BRENDAN_LILYCOVE_MUDKIP ===
 Name: BRENDAN
@@ -15939,13 +16028,13 @@ IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
 - Aerial Ace
 - Slash
 
-Metagross @ Sitrus Berry
+Metagross @ Metagrossite
 Level: 78
 IVs: 31 HP / 31 Atk / 31 Def / 31 SpA / 31 SpD / 31 Spe
-- Earthquake
-- Psychic
 - Meteor Mash
-- Shadow Ball
+- Zen Headbutt
+- Earthquake
+- Bullet Punch
 
 === TRAINER_ANABEL ===
 Name: ANABEL

@@ -201,6 +201,9 @@ enum Gender
 #define OPTIONS_BATTLE_STYLE_SHIFT 0
 #define OPTIONS_BATTLE_STYLE_SET 1
 
+#define OPTIONS_LANGUAGE_ENGLISH 0
+#define OPTIONS_LANGUAGE_MALAYALAM 1
+
 enum __attribute__((packed)) Direction
 {
     DIR_NONE,

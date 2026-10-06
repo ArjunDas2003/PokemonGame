@@ -14,6 +14,7 @@
 #include "international_string_util.h"
 #include "item.h"
 #include "link.h"
+#include "manglish_strings.h"
 #include "menu.h"
 #include "palette.h"
 #include "recorded_battle.h"
@@ -3082,6 +3083,9 @@ u32 BattleStringExpandPlaceholders(const u8 *src, u8 *dst, u32 dstSize)
     u8 *textStart = &text[0];
     u8 multiplayerId;
     u8 fontId = FONT_NORMAL;
+
+    if (gSaveBlock2Ptr && gSaveBlock2Ptr->optionsLanguage == OPTIONS_LANGUAGE_MALAYALAM)
+        src = GetMalayalamTranslation(src);
 
     if (gBattleTypeFlags & BATTLE_TYPE_RECORDED_LINK)
         multiplayerId = gRecordedBattleMultiplayerId;

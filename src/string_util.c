@@ -3,6 +3,7 @@
 #include "text.h"
 #include "strings.h"
 #include "union_room_chat.h"
+#include "manglish_strings.h"
 
 EWRAM_DATA u8 gStringVar1[0x100] = {0};
 EWRAM_DATA u8 gStringVar2[0x100] = {0};
@@ -345,6 +346,9 @@ u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 
 
 u8 *StringExpandPlaceholders(u8 *dest, const u8 *src)
 {
+    if (gSaveBlock2Ptr && gSaveBlock2Ptr->optionsLanguage == OPTIONS_LANGUAGE_MALAYALAM)
+        src = GetMalayalamTranslation(src);
+
     for (;;)
     {
         u8 c = *src++;
